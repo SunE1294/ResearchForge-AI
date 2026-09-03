@@ -35,6 +35,7 @@ export function OnboardingModal() {
   const [academicLevel, setAcademicLevel] = useState<AcademicLevel>(userProfile.academicLevel);
   const [facultyCode, setFacultyCode] = useState<FacultyCode>(userProfile.facultyCode);
   const [departmentCode, setDepartmentCode] = useState<DepartmentCode>(userProfile.departmentCode);
+  const [customDepartmentName, setCustomDepartmentName] = useState(userProfile.customDepartmentName || "");
   const [primaryInterest, setPrimaryInterest] = useState(userProfile.primaryInterest);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(userProfile.skillLevel);
   const [targetTimelineWeeks, setTargetTimelineWeeks] = useState(userProfile.targetTimelineWeeks || 16);
@@ -46,6 +47,7 @@ export function OnboardingModal() {
     setAcademicLevel(userProfile.academicLevel);
     setFacultyCode(userProfile.facultyCode);
     setDepartmentCode(userProfile.departmentCode);
+    setCustomDepartmentName(userProfile.customDepartmentName || "");
     setPrimaryInterest(userProfile.primaryInterest);
     setSkillLevel(userProfile.skillLevel);
     setTargetTimelineWeeks(userProfile.targetTimelineWeeks || 16);
@@ -60,7 +62,7 @@ export function OnboardingModal() {
     }
   };
 
-  const currentDeptInfo = getDepartmentByCode(departmentCode);
+  const currentDeptInfo = getDepartmentByCode(departmentCode, customDepartmentName);
   const filteredDepartments = getDepartmentsByFaculty(facultyCode);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,6 +73,7 @@ export function OnboardingModal() {
       academicLevel,
       facultyCode,
       departmentCode,
+      customDepartmentName,
       primaryInterest,
       skillLevel,
       targetTimelineWeeks
@@ -86,10 +89,10 @@ export function OnboardingModal() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: "00000000-0000-0000-0000-000000000001",
-          fullName: name,
-          institution,
+          fullName: name || "Researcher",
+          institution: institution || "University Scholar",
           facultyCode,
-          departmentCode,
+          departmentCode: departmentCode === "OTHER" ? (customDepartmentName || "Custom Department") : departmentCode,
           primaryInterest,
           academicLevel,
           skillLevel,
@@ -229,9 +232,32 @@ export function OnboardingModal() {
                       {d.code} - {locale === "bn" ? d.nameBn : d.name}
                     </option>
                   ))}
+                  <option value="OTHER">
+                    {locale === "bn" ? "অন্যান্য (কাস্টম বিভাগ লিখুন...)" : "Other Department (Type Custom...)"}
+                  </option>
                 </select>
               </div>
             </div>
+
+            {/* Custom Department Name Field (When OTHER is selected) */}
+            {departmentCode === "OTHER" && (
+              <div className="p-3.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 animate-in fade-in duration-200 space-y-1.5">
+                <label className="block text-xs font-bold text-indigo-900 dark:text-cyan-300">
+                  {locale === "bn" ? "আপনার নিজস্ব বিভাগের নাম টাইপ করুন:" : "Enter Your Custom Department Name:"}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={customDepartmentName}
+                  onChange={(e) => setCustomDepartmentName(e.target.value)}
+                  placeholder={locale === "bn" ? "যেমন: ডিপার্টমেন্ট অব রোবোটিক্স, অর্থনীতি, মাইক্রোবায়োলজি ইত্যাদি..." : "e.g. Department of Robotics & Mechatronics, Economics, Microbiology..."}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400"
+                />
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  {locale === "bn" ? "ড্যাফোডিল বা যেকোনো বিশ্ববিদ্যালয়ের শিক্ষার্থীরা তাদের নিজস্ব বিভাগের নাম এখানে লিখতে পারবেন।" : "Available for students from any tertiary university to customize their specialized discipline."}
+                </p>
+              </div>
+            )}
 
             {/* Live Archetype Preview Box */}
             {currentDeptInfo && (

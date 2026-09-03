@@ -36,7 +36,7 @@ export function Navbar() {
     setMounted(true);
   }, []);
 
-  const deptInfo = getDepartmentByCode(userProfile.departmentCode);
+  const deptInfo = getDepartmentByCode(userProfile.departmentCode, userProfile.customDepartmentName);
 
   const navLinks = [
     { href: "/", label: t("nav.workspace"), icon: Bookmark },

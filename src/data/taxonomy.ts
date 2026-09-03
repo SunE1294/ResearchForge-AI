@@ -442,7 +442,26 @@ export const DEPARTMENTS: DepartmentInfo[] = [
   }
 ];
 
-export function getDepartmentByCode(code: string): DepartmentInfo | undefined {
+export function getDepartmentByCode(code: string, customName?: string): DepartmentInfo | undefined {
+  if (code === "OTHER") {
+    const displayName = customName && customName.trim() ? customName.trim() : "Custom Department";
+    return {
+      code: "OTHER",
+      name: displayName,
+      nameBn: displayName,
+      facultyCode: "FSIT",
+      facultyName: "Institutional Faculty",
+      facultyNameBn: "প্রাতিষ্ঠানিক অনুষদ",
+      archetype: "High Compute (PyTorch, Colab, Kaggle, LaTeX)",
+      recommendedCitation: "IEEE",
+      primaryTools: ["Google Colab / Kaggle", "Overleaf (LaTeX)", "Zotero / Mendeley", "Python / R", "GitHub"],
+      keyVenues: ["Interdisciplinary Academic Journals", "Peer-Reviewed Conferences"],
+      benchmarkDatasets: ["Kaggle Competitions & Open Data", "UCI Machine Learning Repository", "Hugging Face Hub"],
+      methodologyFocus: ["Empirical Evaluation", "Ablation Studies", "Comparative Benchmarking", "Reproducible Research Framework"],
+      description: `Custom academic discipline (${displayName}) with multi-disciplinary research tooling and verified pipelines.`,
+      descriptionBn: `কাস্টম একাডেমিক বিভাগ (${displayName}) - বহুমুখী গবেষণা টুলস ও কাঠামোগত পাইপলাইন।`
+    };
+  }
   return DEPARTMENTS.find((d) => d.code === code);
 }
 

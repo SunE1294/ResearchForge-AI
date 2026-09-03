@@ -26,14 +26,15 @@ interface ResearchStore {
 }
 
 const DEFAULT_PROFILE: UserProfile = {
-  name: "S. M. Tanvir Hossain",
-  institution: "Daffodil International University",
+  name: "",
+  institution: "",
   facultyCode: "FSIT",
   departmentCode: "CSE",
-  primaryInterest: "Deep learning & computer vision for biomedical diagnostics",
+  primaryInterest: "",
   academicLevel: "undergraduate",
   skillLevel: "beginner",
-  targetTimelineWeeks: 16
+  targetTimelineWeeks: 16,
+  customDepartmentName: ""
 };
 
 export const useResearchStore = create<ResearchStore>()(

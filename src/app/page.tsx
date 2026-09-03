@@ -23,7 +23,7 @@ export default function WorkspacePage() {
   const { userProfile, locale } = useResearchStore();
   const { t } = useI18n(locale);
 
-  const deptInfo = getDepartmentByCode(userProfile.departmentCode);
+  const deptInfo = getDepartmentByCode(userProfile.departmentCode, userProfile.customDepartmentName);
 
   const phaseCards = [
     {

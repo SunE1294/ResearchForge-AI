@@ -24,7 +24,7 @@ export function MilestoneGenerator() {
   const { userProfile, locale, currentRoadmap, setCurrentRoadmap, toggleTaskCompletion } = useResearchStore();
   const { t } = useI18n(locale);
 
-  const deptInfo = getDepartmentByCode(userProfile.departmentCode);
+  const deptInfo = getDepartmentByCode(userProfile.departmentCode, userProfile.customDepartmentName);
 
   const [problemStatement, setProblemStatement] = useState(
     currentRoadmap?.problemStatement ||

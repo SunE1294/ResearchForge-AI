@@ -29,7 +29,9 @@ export type DepartmentCode =
   | "ENG"
   | "LAW"
   | "JMC"
-  | "DS";
+  | "DS"
+  // Other / Custom Department
+  | "OTHER";
 
 export type AcademicLevel = "undergraduate" | "masters" | "early_career";
 
@@ -90,6 +92,7 @@ export interface UserProfile {
   skillLevel: SkillLevel;
   thesisTitle?: string;
   targetTimelineWeeks: number;
+  customDepartmentName?: string;
 }
 
 export interface Paper {

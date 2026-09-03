@@ -20,7 +20,7 @@ export function WorkspaceHeader() {
   const { userProfile, locale, setShowOnboardingModal, currentRoadmap, savedPaperIds } = useResearchStore();
   const { t } = useI18n(locale);
 
-  const deptInfo = getDepartmentByCode(userProfile.departmentCode);
+  const deptInfo = getDepartmentByCode(userProfile.departmentCode, userProfile.customDepartmentName);
 
   // Compute completed milestones
   const totalTasks = currentRoadmap?.tasks?.length || 0;
@@ -40,7 +40,7 @@ export function WorkspaceHeader() {
             <div className="flex flex-wrap items-center gap-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-cyan-300 backdrop-blur-sm border border-white/10">
                 <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
-                <span>{userProfile.institution}</span>
+                <span>{userProfile.institution || (locale === "bn" ? "শিক্ষা প্রতিষ্ঠান" : "Tertiary Institution")}</span>
                 <span className="text-white/40">•</span>
                 <span className="capitalize">{userProfile.academicLevel}</span>
               </div>
@@ -50,10 +50,10 @@ export function WorkspaceHeader() {
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-              {t("workspace.greeting")}, <span className="bg-gradient-to-r from-cyan-400 to-indigo-300 bg-clip-text text-transparent">{userProfile.name}</span>
+              {t("workspace.greeting")}, <span className="bg-gradient-to-r from-cyan-400 to-indigo-300 bg-clip-text text-transparent">{userProfile.name || (locale === "bn" ? "গবেষক" : "Scholar")}</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 max-w-2xl">
-              {userProfile.primaryInterest}
+              {userProfile.primaryInterest || (locale === "bn" ? "আপনার অনুষদ, বিভাগ ও গবেষণার টপিক সাজাতে 'প্রোফাইল পরিবর্তন' এ ক্লিক করুন।" : "Configure your department, university, and thesis goals to activate personalized workflows.")}
             </p>
           </div>
 
