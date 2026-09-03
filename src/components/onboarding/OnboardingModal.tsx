@@ -148,12 +148,12 @@ export function OnboardingModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 my-8 animate-in fade-in zoom-in-95 duration-200">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-950/75 backdrop-blur-sm overflow-hidden">
+      <div className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+        {/* Header - Fixed & Always Visible */}
+        <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600 dark:bg-cyan-500 flex items-center justify-center text-white dark:text-slate-950 shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-indigo-600 dark:bg-cyan-500 flex items-center justify-center text-white dark:text-slate-950 shadow-md shrink-0">
               <GraduationCap className="w-6 h-6" />
             </div>
             <div>
@@ -161,7 +161,7 @@ export function OnboardingModal() {
                 <Sparkles className="w-3 h-3" />
                 {t("onboarding.badge")}
               </div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                 {t("onboarding.title")}
               </h3>
             </div>
@@ -176,8 +176,10 @@ export function OnboardingModal() {
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        {/* Form Container wrapping scrollable body and fixed footer */}
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden min-h-0">
+          {/* Scrollable Form Body */}
+          <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
           {/* Step 1: Student Identity */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-cyan-400 flex items-center gap-2">
@@ -414,8 +416,10 @@ export function OnboardingModal() {
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+          </div>
+
+          {/* Action Buttons - Fixed & Always Visible inside Modal */}
+          <div className="shrink-0 px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-sm flex flex-col sm:flex-row items-center justify-between gap-3">
             <button
               type="button"
               onClick={handleSkip}
