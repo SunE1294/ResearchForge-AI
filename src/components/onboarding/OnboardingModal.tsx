@@ -105,26 +105,6 @@ export function OnboardingModal() {
   const currentDeptInfo = getDepartmentByCode(departmentCode, customDepartmentName, customFacultyName);
   const filteredDepartments = getDepartmentsByFaculty(facultyCode);
 
-  const handleSkip = () => {
-    const finalName = name.trim() || (locale === "bn" ? "গবেষক শিক্ষার্থী" : "Student Scholar");
-    const finalInstitution = institution.trim() || (locale === "bn" ? "শিক্ষা প্রতিষ্ঠান" : "Tertiary Institution");
-
-    setUserProfile({
-      name: finalName,
-      institution: finalInstitution,
-      academicLevel: "undergraduate",
-      facultyCode: facultyCode || "FSIT",
-      departmentCode: departmentCode || "CSE",
-      primaryInterest: "", // Purely blank for beginner mode!
-      skillLevel: "beginner",
-      targetTimelineWeeks: 16,
-      customDepartmentName: customDepartmentName.trim(),
-      customFacultyName: customFacultyName.trim(),
-    });
-    setHasCompletedOnboarding(true);
-    setShowOnboardingModal(false);
-  };
-
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
@@ -195,14 +175,16 @@ export function OnboardingModal() {
               </h3>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={handleSkip}
-            title={locale === "bn" ? "স্কিপ করে প্রবেশ করুন" : "Dismiss / Skip"}
-            className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          {hasCompletedOnboarding && (
+            <button
+              type="button"
+              onClick={() => setShowOnboardingModal(false)}
+              title={locale === "bn" ? "বন্ধ করুন" : "Close"}
+              className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         {/* 3-Step Interactive Tabs Navigator */}
@@ -313,10 +295,13 @@ export function OnboardingModal() {
                   </select>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
-                  {locale === "bn"
-                    ? "💡 আপনি নতুন শিক্ষার্থী হলে নাম বা প্রতিষ্ঠান পূরণ না করেও সরাসরি চালিয়ে যেতে পারবেন।"
-                    : "💡 Beginners can leave optional fields empty and proceed freely."}
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-indigo-500 dark:text-cyan-400 shrink-0" />
+                  <span>
+                    {locale === "bn"
+                      ? "আপনার অ্যাকাডেমিক তথ্য অনুযায়ী পুরো প্ল্যাটফর্মের রিসার্চ ওয়ার্কস্পেস ও লিটারেচার সাজানো হবে।"
+                      : "Your profile is customized to tailor your academic research workspace and literature recommendations."}
+                  </span>
                 </div>
               </div>
             )}
@@ -527,33 +512,31 @@ export function OnboardingModal() {
 
           </div>
 
-          {/* Action Footer (Stepped Navigation + Universal Skip Button) */}
+          {/* Action Footer (Stepped Navigation) */}
           <div className="shrink-0 px-5 sm:px-6 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-900/90 backdrop-blur-sm flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={handleSkip}
-              className="px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition"
-            >
-              {locale === "bn" ? "স্কিপ করে প্রবেশ করুন" : "Skip & Explore"}
-            </button>
-
-            <div className="flex items-center gap-2">
-              {currentStep > 1 && (
+            <div>
+              {currentStep > 1 ? (
                 <button
                   type="button"
                   onClick={() => setCurrentStep((s) => Math.max(1, s - 1))}
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 text-xs font-bold transition"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>{locale === "bn" ? "পূর্ববর্তী" : "Back"}</span>
+                  <span>{locale === "bn" ? "পূর্ববর্তী ধাপ" : "Back"}</span>
                 </button>
+              ) : (
+                <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
+                  {locale === "bn" ? "ধাপ ১ অব ৩ • পরিচিতি" : "Step 1 of 3 • Identity"}
+                </span>
               )}
+            </div>
 
+            <div className="flex items-center gap-2">
               {currentStep < 3 ? (
                 <button
                   type="button"
                   onClick={() => setCurrentStep((s) => Math.min(3, s + 1))}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition"
+                  className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition"
                 >
                   <span>{locale === "bn" ? "পরবর্তী ধাপ" : "Next Step"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
