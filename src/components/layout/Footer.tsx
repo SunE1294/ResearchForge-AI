@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { useResearchStore } from "@/store/useResearchStore";
 import { useI18n } from "@/lib/i18n";
-import { Sparkles, Shield, Github, BookCheck, GraduationCap } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
+import { Sparkles, Shield, Github, BookCheck, GraduationCap, FlaskConical } from "lucide-react";
 
 export function Footer() {
   const { locale } = useResearchStore();
@@ -16,9 +17,7 @@ export function Footer() {
         {/* Brand Column */}
         <div className="md:col-span-2 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 dark:bg-cyan-500 flex items-center justify-center text-white dark:text-slate-950 font-bold shadow">
-              <Sparkles className="w-4 h-4" />
-            </div>
+            <Logo size={32} />
             <span className="text-base font-bold text-slate-900 dark:text-white">
               ResearchForge AI
             </span>
@@ -40,12 +39,17 @@ export function Footer() {
           <ul className="space-y-1.5 text-xs">
             <li>
               <Link href="/foundations" className="hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
-                Phase B: Academic Foundations
+                Academic Foundations
+              </Link>
+            </li>
+            <li>
+              <Link href="/methodology-lab" className="hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
+                Methodology Lab & Survey
               </Link>
             </li>
             <li>
               <Link href="/discovery" className="hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
-                Phase C: Discovery & OpenAlex
+                Discovery & OpenAlex
               </Link>
             </li>
             <li>
