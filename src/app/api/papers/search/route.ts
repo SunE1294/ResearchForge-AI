@@ -1,86 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchOpenAlex } from "@/lib/openalex";
+import { searchCrossref } from "@/lib/crossref";
 import { searchSemanticScholar } from "@/lib/semantic-scholar";
 import { sanitizeQuery } from "@/lib/utils";
 import { Paper } from "@/types";
 
-const CURATED_FALLBACKS: Paper[] = [
-  {
-    id: "curated-1",
-    title: "Deep Learning Architectures for Computer Vision in Healthcare: A Comprehensive Survey",
-    authors: ["A. Rahman", "S. Chowdhury", "M. Karim"],
-    year: 2024,
-    venue: "IEEE Transactions on Neural Networks and Learning Systems",
-    abstract: "This paper systematically investigates state-of-the-art convolutional and vision transformer architectures in clinical diagnostics, highlighting ablation benchmarks and cross-institutional dataset constraints.",
-    citationCount: 142,
-    source: "Curated",
-    tags: ["Deep Learning", "Vision Transformers", "Healthcare AI"]
-  },
-  {
-    id: "curated-2",
-    title: "Socioeconomic Impact of Microfinance and Mobile Banking in Rural Bangladesh: A Panel Data Study",
-    authors: ["N. Sultana", "F. Ahmed", "K. Islam"],
-    year: 2023,
-    venue: "World Development (Elsevier)",
-    abstract: "Analyzing longitudinal household survey data across 14 rural districts in Bangladesh to quantify the marginal consumption smoothing effects of digital mobile financial services.",
-    citationCount: 89,
-    source: "Curated",
-    tags: ["Econometrics", "Microfinance", "Panel Data"]
-  },
-  {
-    id: "curated-3",
-    title: "In-Silico Evaluation and Molecular Docking of Bioactive Phytochemicals Against Multi-Drug Resistant Pathogens",
-    authors: ["T. Hasan", "M. Begum", "R. Paul"],
-    year: 2024,
-    venue: "European Journal of Medicinal Chemistry",
-    abstract: "Virtual screening and binding energy calculations of 54 endemic plant secondary metabolites against microbial target enzymes using AutoDock Vina and ADMET profiling.",
-    citationCount: 56,
-    source: "Curated",
-    tags: ["Molecular Docking", "AutoDock", "Pharmacology"]
-  }
-];
-
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const rawQuery = searchParams.get("q") || "";
+  const dept = searchParams.get("dept") || "";
+  const faculty = searchParams.get("faculty") || "";
   const query = sanitizeQuery(rawQuery);
 
-  if (!query) {
-    return NextResponse.json({ papers: CURATED_FALLBACKS, total: CURATED_FALLBACKS.length });
-  }
+  // If query is empty, construct a discipline-focused baseline query
+  const effectiveQuery = query || (dept ? `${dept} research` : (faculty ? `${faculty} methodology` : "academic research methodology"));
 
   try {
-    // Run OpenAlex and Semantic Scholar concurrently
-    const [openAlexResult, semanticScholarResult] = await Promise.allSettled([
-      searchOpenAlex(query, 8),
-      searchSemanticScholar(query, 6),
+    // Run OpenAlex, Crossref, and Semantic Scholar concurrently
+    const [openAlexResult, crossrefResult, semanticScholarResult] = await Promise.allSettled([
+      searchOpenAlex(effectiveQuery, 8),
+      searchCrossref(effectiveQuery, 8),
+      searchSemanticScholar(effectiveQuery, 6),
     ]);
 
     const openAlexPapers = openAlexResult.status === "fulfilled" ? openAlexResult.value : [];
+    const crossrefPapers = crossrefResult.status === "fulfilled" ? crossrefResult.value : [];
     const semanticPapers = semanticScholarResult.status === "fulfilled" ? semanticScholarResult.value : [];
 
-    // Deduplicate by lowercase normalized title
+    // Deduplicate by lowercase alphanumeric normalized title or DOI
     const seenTitles = new Set<string>();
+    const seenDois = new Set<string>();
     const mergedPapers: Paper[] = [];
 
-    for (const paper of [...openAlexPapers, ...semanticPapers]) {
-      const normalized = paper.title.toLowerCase().replace(/[^\w]/g, "");
-      if (normalized && !seenTitles.has(normalized)) {
-        seenTitles.add(normalized);
-        mergedPapers.push(paper);
+    for (const paper of [...openAlexPapers, ...crossrefPapers, ...semanticPapers]) {
+      const normalizedTitle = paper.title.toLowerCase().replace(/[^\w]/g, "");
+      const normalizedDoi = paper.doi ? paper.doi.toLowerCase().trim() : null;
+
+      if (normalizedDoi && seenDois.has(normalizedDoi)) {
+        continue;
       }
+      if (normalizedTitle && seenTitles.has(normalizedTitle)) {
+        continue;
+      }
+
+      if (normalizedDoi) seenDois.add(normalizedDoi);
+      if (normalizedTitle) seenTitles.add(normalizedTitle);
+      mergedPapers.push(paper);
     }
 
-    // Fallback if APIs are restricted or return empty
-    const finalPapers = mergedPapers.length > 0 ? mergedPapers : CURATED_FALLBACKS;
+    // Sort by citation count descending to surface top landmark papers
+    mergedPapers.sort((a, b) => (b.citationCount || 0) - (a.citationCount || 0));
 
     return NextResponse.json({
-      papers: finalPapers,
-      total: finalPapers.length,
-      query,
+      papers: mergedPapers,
+      total: mergedPapers.length,
+      query: effectiveQuery,
+      source: "Live Crossref & OpenAlex API",
     });
   } catch (error) {
     console.error("API /api/papers/search error:", error);
-    return NextResponse.json({ papers: CURATED_FALLBACKS, total: CURATED_FALLBACKS.length });
+    return NextResponse.json({
+      papers: [],
+      total: 0,
+      query: effectiveQuery,
+      error: "Search failed to reach live indexes",
+    });
   }
 }

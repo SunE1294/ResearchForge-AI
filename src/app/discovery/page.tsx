@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
 import { useI18n } from "@/lib/i18n";
+import { getDepartmentByCode } from "@/data/taxonomy";
 import { PaperSearchCard } from "@/components/discovery/PaperSearchCard";
 import { DatasetFinder } from "@/components/discovery/DatasetFinder";
 import { QueryBuilderModal } from "@/components/discovery/QueryBuilderModal";
@@ -22,7 +23,18 @@ export default function DiscoveryPage() {
   const { userProfile, locale, savedPaperIds } = useResearchStore();
   const { t } = useI18n(locale);
 
-  const [searchQuery, setSearchQuery] = useState(userProfile.primaryInterest || "deep learning medical imaging");
+  // Derive smart discipline-aware search topic based on student's actual department / faculty
+  const deptInfo = getDepartmentByCode(
+    userProfile.departmentCode,
+    userProfile.customDepartmentName,
+    userProfile.customFacultyName
+  );
+
+  const initialTopic = userProfile.primaryInterest && userProfile.primaryInterest.trim().length > 0
+    ? userProfile.primaryInterest.trim()
+    : (deptInfo ? deptInfo.name : "Academic Research Methodology");
+
+  const [searchQuery, setSearchQuery] = useState(initialTopic);
   const [papers, setPapers] = useState<Paper[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"papers" | "datasets" | "bookmarks">("papers");
@@ -34,7 +46,9 @@ export default function DiscoveryPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`/api/papers/search?q=${encodeURIComponent(queryText)}&dept=${userProfile.departmentCode}`);
+      const res = await fetch(
+        `/api/papers/search?q=${encodeURIComponent(queryText)}&dept=${encodeURIComponent(userProfile.departmentCode)}&faculty=${encodeURIComponent(userProfile.facultyCode)}`
+      );
       const data = await res.json();
       if (data.papers) {
         setPapers(data.papers);
@@ -46,7 +60,7 @@ export default function DiscoveryPage() {
     }
   };
 
-  // Initial load
+  // Initial load with student's actual topic or department
   useEffect(() => {
     performSearch(searchQuery);
   }, []);
@@ -91,7 +105,7 @@ export default function DiscoveryPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t("discovery.searchPlaceholder")}
+              placeholder={locale === "bn" ? "যেকোনো বিষয়ের গবেষণাপত্র ও ডেটাসেট অনুসন্ধান করুন..." : "Search real academic papers & benchmark datasets across any discipline..."}
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400 text-xs font-medium"
             />
           </div>
@@ -168,24 +182,28 @@ export default function DiscoveryPage() {
 
       {/* Main Content Area */}
       {activeTab === "datasets" ? (
-        <DatasetFinder />
+        <DatasetFinder initialSearchQuery={searchQuery} />
       ) : (
         <div className="space-y-4">
           {isLoading ? (
             <div className="p-12 text-center space-y-3">
               <Loader2 className="w-8 h-8 text-indigo-600 dark:text-cyan-400 animate-spin mx-auto" />
               <p className="font-semibold text-slate-600 dark:text-slate-400">
-                {t("discovery.searching")}
+                {locale === "bn" ? "আন্তর্জাতিক ইনডেক্স (Crossref ও OpenAlex) থেকে পেপার অনুসন্ধান করা হচ্ছে..." : "Searching international indexes (Crossref & OpenAlex)..."}
               </p>
             </div>
           ) : displayedPapers.length === 0 ? (
             <div className="p-12 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
               <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
               <p className="font-bold text-slate-700 dark:text-slate-300">
-                {activeTab === "bookmarks" ? "No bookmarked papers yet." : "No publications found matching criteria."}
+                {activeTab === "bookmarks" 
+                  ? (locale === "bn" ? "কোনো সংরক্ষিত পেপার নেই।" : "No bookmarked papers yet.") 
+                  : (locale === "bn" ? "এই কিওয়ার্ড দিয়ে কোনো পেপার পাওয়া যায়নি।" : "No publications found matching criteria.")}
               </p>
               <p className="text-slate-500">
-                {activeTab === "bookmarks" ? "Click the bookmark icon on any paper card to save it." : "Try expanding your keywords or use the Boolean Query Assistant."}
+                {activeTab === "bookmarks" 
+                  ? (locale === "bn" ? "যেকোনো পেপার কার্ডের বুকমার্ক আইকনে ক্লিক করে সংরক্ষণ করতে পারবেন।" : "Click the bookmark icon on any paper card to save it.") 
+                  : (locale === "bn" ? "সহজ ইংরেজি কিওয়ার্ড বা বুলিয়ান অ্যাসিস্ট্যান্ট ব্যবহার করে পুনরায় খুঁজুন।" : "Try expanding your keywords or use the Boolean Query Assistant.")}
               </p>
             </div>
           ) : (

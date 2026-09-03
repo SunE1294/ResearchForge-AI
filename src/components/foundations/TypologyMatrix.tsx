@@ -78,17 +78,17 @@ export function TypologyMatrix() {
         ? "রিভিউ পেপার কোনো নতুন ল্যাবরেটরি এক্সপেরিমেন্ট বা ডেটা তৈরি করে না। এটি একটি নির্দিষ্ট বিষয়ের ওপর এ পর্যন্ত যত কাজ হয়েছে (যেমন- ১০০ থেকে ২০০টি পেপার), সেগুলোকে একত্রিত করে একটি বিশাল ওভারভিউ দেয়। এর দৈর্ঘ্য বেশ বড় হয় (১৫ থেকে ৫০ পৃষ্ঠা বা তার বেশি) এবং এতে প্রচুর লিটারেচার সাইটেশন ও তুলনামূলক টেবিল থাকে।"
         : "Review papers do not introduce new raw lab datasets or experiments. Instead, they synthesize and categorize 100 to 300+ existing publications into a rigorous state-of-the-art taxonomy. They feature large comparative tables and massive bibliographies.",
       examplePaper: {
-        title: "Deep Learning (Nature Landmark Review)",
-        titleBn: "ডিপ লার্নিং (নেচার রিভিউ পেপার)",
-        authors: "Yann LeCun, Yoshua Bengio, Geoffrey Hinton",
-        venue: "Nature (Volume 521, Pages 436–444, 2015)",
-        citationCount: "৭০,০০০+ সাইটেশন (নেচার জার্নালের সর্বকালের অন্যতম প্রভাবশালী রিভিউ)",
+        title: "Transformers in Skin Lesion Classification and Diagnosis: A Systematic Review",
+        titleBn: "ট্রান্সফরমারস ইন স্কিন লেসন ক্লাসিফিকেশন অ্যান্ড ডায়াগনোসিস: আ সিস্টেমেটিক রিভিউ",
+        authors: "medRxiv Systematic Review Investigators (Cold Spring Harbor Laboratory, BMJ, Yale)",
+        venue: "medRxiv (PRISMA 2020 Compliant Systematic Review / Meta-Analysis)",
+        citationCount: "ওপেন এক্সেস ফুল-টেক্সট সিস্টেমেটিক লিটারেচার রিভিউ (PRISMA 2020 স্ট্যান্ডার্ড)",
         description: locale === "bn"
-          ? "ডিপ লার্নিং জগতের ৩ কিংবদন্তি (Yann LeCun, Yoshua Bengio এবং Geoffrey Hinton) এর লেখা বিখ্যাত রিভিউ পেপার। এটি একটি অনবদ্য রিভিউ পেপার যা দেখলে বুঝবেন কীভাবে একটি বিশাল গবেষণাক্ষেত্রকে নিখুঁতভাবে সারসংক্ষেপ ও রূপরেখা দেওয়া হয়।"
-          : "Written by Turing Award laureates LeCun, Bengio, and Hinton in Nature. A benchmark exemplar of how to structure, synthesize, and visually summarize complex breakthroughs for the scientific community.",
-        officialUrl: "https://www.nature.com/articles/nature14539",
-        arxivUrl: "https://dl.acm.org/doi/10.1038/nature14539",
-        pdfUrl: "https://profs.etsmtl.ca/rlalonde/annal/nature14539.pdf"
+          ? "একটি আদর্শ সিস্টেমেটিক রিভিউ (SLR) পেপারের নিখুঁত বাস্তব উদাহরণ। এতে কোনো নতুন ল্যাব এক্সপেরিমেন্ট না করে কীভাবে শতশত গবেষণাপত্রকে PRISMA 2020 ফ্রেমওয়ার্ক অনুযায়ী বাছাই, স্ক্রিনিং ও তুলনামূলক টেবিলের মাধ্যমে উপস্থাপন করা হয় তা এই সম্পূর্ণ ওপেন-এক্সেস পেপারটিতে দেখতে পাবেন।"
+          : "An authentic, fully open-access Systematic Literature Review (SLR) following PRISMA 2020 guidelines. Demonstrates how hundreds of disparate studies are filtered, quality-assessed, and structured into comparative taxonomy matrices without generating new raw datasets.",
+        officialUrl: "https://www.medrxiv.org/content/10.1101/2024.09.19.24314004v2.full",
+        arxivUrl: "https://www.medrxiv.org/content/10.1101/2024.09.19.24314004v2.full",
+        pdfUrl: "https://www.medrxiv.org/content/10.1101/2024.09.19.24314004v2.full.pdf"
       },
       keyCharacteristics: locale === "bn" ? [
         "বুলিয়ান সার্চ কুয়েরি ব্যবহার করে সুস্পষ্ট ও পুনরাবৃত্তিযোগ্য সার্চ প্রটোকল অনুসরণ করে।",
