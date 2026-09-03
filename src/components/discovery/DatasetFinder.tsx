@@ -1,0 +1,112 @@
+"use client";
+
+import React, { useState } from "react";
+import { BENCHMARK_DATASETS } from "@/data/datasets";
+import { useResearchStore } from "@/store/useResearchStore";
+import { Database, ExternalLink, Filter, Search, Tag } from "lucide-react";
+import { FacultyCode } from "@/types";
+
+export function DatasetFinder() {
+  const { userProfile } = useResearchStore();
+  const [selectedFaculty, setSelectedFaculty] = useState<string>("ALL");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const filtered = BENCHMARK_DATASETS.filter((ds) => {
+    const matchesFaculty = selectedFaculty === "ALL" || ds.facultyCode === selectedFaculty;
+    const matchesSearch =
+      searchTerm === "" ||
+      ds.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ds.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ds.tags.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesFaculty && matchesSearch;
+  });
+
+  return (
+    <div className="space-y-5 text-xs">
+      {/* Filters & Search */}
+      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <div className="relative w-full sm:w-80">
+          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search datasets, modalities, or tags..."
+            className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400"
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+          {["ALL", "FSIT", "FE", "FBE", "FHLS", "FHSS"].map((fac) => (
+            <button
+              key={fac}
+              onClick={() => setSelectedFaculty(fac)}
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all shrink-0 ${
+                selectedFaculty === fac
+                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950 shadow-sm"
+                  : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+              }`}
+            >
+              {fac === "ALL" ? "All Faculties" : fac}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Dataset Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {filtered.map((dataset) => (
+          <div
+            key={dataset.id}
+            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all space-y-3 flex flex-col justify-between"
+          >
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 border border-indigo-200/50 dark:border-indigo-900/50">
+                  {dataset.facultyCode} • {dataset.departments.join(", ")}
+                </span>
+                <span className="text-[10px] font-semibold text-slate-500">
+                  {dataset.license}
+                </span>
+              </div>
+
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                {dataset.title}
+              </h4>
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                {dataset.description}
+              </p>
+
+              <div className="flex flex-wrap gap-1 pt-1">
+                {dataset.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2 py-0.5 rounded-md text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-[11px] text-slate-500 font-medium">
+                Format: <span className="font-semibold text-slate-700 dark:text-slate-300">{dataset.format.join(", ")}</span>
+              </span>
+
+              <a
+                href={dataset.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 font-bold hover:opacity-90 transition-opacity"
+              >
+                <span>Access Repository</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,167 @@
+"use client";
+
+import React, { useState } from "react";
+import { Paper } from "@/types";
+import { useResearchStore } from "@/store/useResearchStore";
+import {
+  Bookmark,
+  ExternalLink,
+  BookOpen,
+  Share2,
+  Copy,
+  Check,
+  Quote,
+  Sparkles
+} from "lucide-react";
+import { formatCitationCount } from "@/lib/utils";
+
+interface PaperSearchCardProps {
+  paper: Paper;
+}
+
+export function PaperSearchCard({ paper }: PaperSearchCardProps) {
+  const { savedPaperIds, toggleSavePaper } = useResearchStore();
+  const [showBibtex, setShowBibtex] = useState(false);
+  const [copiedBib, setCopiedBib] = useState(false);
+  const [expandedAbstract, setExpandedAbstract] = useState(false);
+
+  const isSaved = savedPaperIds.includes(paper.id);
+
+  const bibtexContent = `@article{${(paper.authors[0] || "Author").replace(/\s+/g, "")}${paper.year},
+  title = {${paper.title}},
+  author = {${paper.authors.join(" and ")}},
+  journal = {${paper.venue}},
+  year = {${paper.year}},
+  citations = {${paper.citationCount}}
+}`;
+
+  const copyBibtex = () => {
+    navigator.clipboard.writeText(bibtexContent);
+    setCopiedBib(true);
+    setTimeout(() => setCopiedBib(false), 2000);
+  };
+
+  return (
+    <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all space-y-3">
+      {/* Header: Title & Bookmark */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="space-y-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 border border-indigo-200/50 dark:border-indigo-900/50">
+              {paper.source}
+            </span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {paper.venue} ({paper.year})
+            </span>
+            <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
+              ★ {formatCitationCount(paper.citationCount)} Citations
+            </span>
+          </div>
+
+          <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+            {paper.title}
+          </h3>
+        </div>
+
+        <button
+          onClick={() => toggleSavePaper(paper.id)}
+          className={`p-2 rounded-xl border transition-colors shrink-0 ${
+            isSaved
+              ? "bg-indigo-600 text-white border-indigo-600 dark:bg-cyan-500 dark:text-slate-950"
+              : "border-slate-200 dark:border-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-white"
+          }`}
+          title={isSaved ? "Saved to your literature list" : "Save for thesis"}
+        >
+          <Bookmark className="w-4 h-4 fill-current" />
+        </button>
+      </div>
+
+      {/* Authors */}
+      <div className="text-xs text-slate-600 dark:text-slate-400">
+        <span className="font-semibold text-slate-700 dark:text-slate-300">Authors:</span>{" "}
+        {paper.authors.join(", ")}
+      </div>
+
+      {/* Abstract */}
+      <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p className={expandedAbstract ? "" : "line-clamp-2"}>
+          {paper.abstract}
+        </p>
+        {paper.abstract.length > 180 && (
+          <button
+            onClick={() => setExpandedAbstract(!expandedAbstract)}
+            className="text-[11px] font-bold text-indigo-600 dark:text-cyan-400 hover:underline mt-0.5"
+          >
+            {expandedAbstract ? "Show less" : "Read full abstract"}
+          </button>
+        )}
+      </div>
+
+      {/* Tags */}
+      {paper.tags && paper.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {paper.tags.map((tag, idx) => (
+            <span
+              key={idx}
+              className="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div className="flex items-center gap-2">
+          {paper.openAccessUrl && (
+            <a
+              href={paper.openAccessUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/60 font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Read Open Access PDF</span>
+            </a>
+          )}
+          {paper.doi && (
+            <a
+              href={`https://doi.org/${paper.doi}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-slate-500 hover:text-indigo-600 dark:hover:text-cyan-400 underline font-mono text-[11px]"
+            >
+              DOI Link
+            </a>
+          )}
+        </div>
+
+        <button
+          onClick={() => setShowBibtex(!showBibtex)}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium transition-colors"
+        >
+          <Quote className="w-3.5 h-3.5 text-indigo-500 dark:text-cyan-400" />
+          <span>BibTeX</span>
+        </button>
+      </div>
+
+      {/* BibTeX Flyout */}
+      {showBibtex && (
+        <div className="p-3.5 rounded-xl bg-slate-900 text-slate-200 border border-slate-800 font-mono text-[11px] space-y-2">
+          <div className="flex items-center justify-between text-slate-400">
+            <span>BibTeX Citation Record</span>
+            <button
+              onClick={copyBibtex}
+              className="flex items-center gap-1 text-cyan-400 hover:underline"
+            >
+              {copiedBib ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedBib ? "Copied!" : "Copy"}</span>
+            </button>
+          </div>
+          <pre className="overflow-x-auto whitespace-pre-wrap">{bibtexContent}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
