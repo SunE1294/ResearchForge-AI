@@ -4,8 +4,8 @@ import { dbSaveProfile, dbGetProfile } from "@/lib/db";
 
 const ProfileSchema = z.object({
   userId: z.string().default("00000000-0000-0000-0000-000000000001"),
-  fullName: z.string().min(2),
-  institution: z.string().default("Daffodil International University"),
+  fullName: z.string().optional().default("Research Scholar"),
+  institution: z.string().optional().default("Academic Institution"),
   facultyCode: z.string().default("FSIT"),
   departmentCode: z.string().default("CSE"),
   primaryInterest: z.string().default(""),

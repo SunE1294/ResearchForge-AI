@@ -1,8 +1,11 @@
 import { Pool, QueryResult, QueryResultRow } from "pg";
 
-const connectionString =
+const rawConnectionString =
   process.env.DATABASE_URL ||
-  "postgresql://postgres.wmzpvkkbvyevkjecpvta:Shamimul1294Pani@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require";
+  "postgresql://postgres.wmzpvkkbvyevkjecpvta:Shamimul1294Pani@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres";
+
+// Remove sslmode query param so pg respects explicit rejectUnauthorized: false without certificate chain rejection
+const connectionString = rawConnectionString.replace(/[?&]sslmode=[^&]+/, "");
 
 let pool: Pool | null = null;
 

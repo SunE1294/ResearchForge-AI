@@ -76,7 +76,7 @@ export function EthicsAuditor() {
                 {locale === "bn" ? "অনুমোদিত ও নৈতিক এআই ব্যবহার" : "Permissible & Ethical AI Usage"}
               </h4>
               <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                {locale === "bn" ? "IEEE, Elsevier এবং DIU গাইডলাইন অনুযায়ী স্বীকৃত" : "Accepted by IEEE, Elsevier & DIU Guidelines"}
+                {locale === "bn" ? "IEEE, Elsevier এবং আন্তর্জাতিক অ্যাকাডেমিক গাইডলাইন অনুযায়ী স্বীকৃত" : "Accepted by IEEE, Elsevier & International Academic Guidelines"}
               </span>
             </div>
           </div>

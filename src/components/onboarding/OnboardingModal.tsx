@@ -131,7 +131,7 @@ export function OnboardingModal() {
 
     // Sync directly with Supabase PostgreSQL
     try {
-      await fetch("/api/profile", {
+      const syncRes = await fetch("/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -139,12 +139,14 @@ export function OnboardingModal() {
           fullName: finalName,
           institution: finalInstitution,
           facultyCode,
-          departmentCode: departmentCode === "OTHER" ? (customDepartmentName.trim() || "Custom Department") : departmentCode,
+          departmentCode: departmentCode === "OTHER" ? (customDepartmentName.trim() || "OTHER") : departmentCode,
           primaryInterest: finalInterest,
           academicLevel,
           skillLevel,
         }),
       });
+      const syncData = await syncRes.json();
+      console.log("Supabase profile sync successful:", syncData);
     } catch (err) {
       console.warn("Notice: profile sync to database", err);
     }

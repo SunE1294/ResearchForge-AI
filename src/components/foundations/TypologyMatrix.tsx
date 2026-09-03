@@ -186,8 +186,8 @@ export function TypologyMatrix() {
         "A strong Master's thesis can usually yield at least one Q1/Q2 journal or CORE conference paper."
       ],
       idealWhen: locale === "bn"
-        ? "ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটি বা যেকোনো বিশ্ববিদ্যালয়ে স্নাতক ও মাস্টার্স ডিগ্রি সম্পন্নের সময়।"
-        : "Meeting graduation requirements at Daffodil International University or global tertiary universities."
+        ? "যেকোনো বিশ্ববিদ্যালয় বা উচ্চশিক্ষা প্রতিষ্ঠানে স্নাতক ও মাস্টার্স ডিগ্রি সম্পন্নের সময়।"
+        : "Meeting graduation requirements across university undergraduate and master's degree programs."
     }
   ];
 

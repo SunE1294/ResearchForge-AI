@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   keywords: [
     "Academic Research",
     "Thesis Co-Pilot",
-    "Daffodil International University",
+    "Undergraduate & Graduate Thesis",
     "OpenAlex",
     "Semantic Scholar",
     "Gantt Milestones",
