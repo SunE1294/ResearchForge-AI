@@ -35,6 +35,37 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
   citations = {${paper.citationCount}}
 }`;
 
+  const handleToggleSave = async () => {
+    toggleSavePaper(paper.id);
+    try {
+      if (!isSaved) {
+        // Save to Supabase
+        await fetch("/api/papers/saved", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: "guest_student",
+            paperId: paper.id,
+            title: paper.title,
+            authors: paper.authors,
+            year: paper.year,
+            venue: paper.venue,
+            doi: paper.doi,
+            citationCount: paper.citationCount,
+            openAccessUrl: paper.openAccessUrl,
+          }),
+        });
+      } else {
+        // Delete from Supabase
+        await fetch(`/api/papers/saved?userId=guest_student&paperId=${encodeURIComponent(paper.id)}`, {
+          method: "DELETE",
+        });
+      }
+    } catch (e) {
+      console.warn("Notice: Paper bookmark sync to database", e);
+    }
+  };
+
   const copyBibtex = () => {
     navigator.clipboard.writeText(bibtexContent);
     setCopiedBib(true);
@@ -64,7 +95,7 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
         </div>
 
         <button
-          onClick={() => toggleSavePaper(paper.id)}
+          onClick={handleToggleSave}
           className={`p-2 rounded-xl border transition-colors shrink-0 ${
             isSaved
               ? "bg-indigo-600 text-white border-indigo-600 dark:bg-cyan-500 dark:text-slate-950"

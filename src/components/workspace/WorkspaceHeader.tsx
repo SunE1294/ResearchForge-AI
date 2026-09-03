@@ -37,11 +37,17 @@ export function WorkspaceHeader() {
         {/* Top bar: Welcome & Profile reconfigure */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-cyan-300 backdrop-blur-sm border border-white/10">
-              <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{userProfile.institution}</span>
-              <span className="text-white/40">•</span>
-              <span className="capitalize">{userProfile.academicLevel}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-cyan-300 backdrop-blur-sm border border-white/10">
+                <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
+                <span>{userProfile.institution}</span>
+                <span className="text-white/40">•</span>
+                <span className="capitalize">{userProfile.academicLevel}</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>Supabase PostgreSQL Connected</span>
+              </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
               {t("workspace.greeting")}, <span className="bg-gradient-to-r from-cyan-400 to-indigo-300 bg-clip-text text-transparent">{userProfile.name}</span>

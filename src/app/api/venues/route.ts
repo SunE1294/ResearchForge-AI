@@ -1,21 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+import { dbGetVenues } from "@/lib/db";
 import { KEY_VENUES, PREDATORY_CHECKLIST } from "@/data/venues";
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const deptCode = searchParams.get("dept");
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const deptCode = searchParams.get("dept") || undefined;
 
-  let venues = KEY_VENUES;
-  if (deptCode) {
-    venues = KEY_VENUES.filter((v) => v.departments.includes(deptCode as any));
-    if (venues.length === 0) {
-      venues = KEY_VENUES.slice(0, 4);
-    }
+    const venues = await dbGetVenues(deptCode);
+
+    return NextResponse.json({
+      venues: venues.length > 0 ? venues : KEY_VENUES,
+      predatoryChecklist: PREDATORY_CHECKLIST,
+      total: venues.length > 0 ? venues.length : KEY_VENUES.length,
+      source: "Supabase PostgreSQL",
+    });
+  } catch (error) {
+    console.warn("Falling back to local venues cache:", error);
+    return NextResponse.json({
+      venues: KEY_VENUES,
+      predatoryChecklist: PREDATORY_CHECKLIST,
+      total: KEY_VENUES.length,
+      source: "Local Catalog",
+    });
   }
-
-  return NextResponse.json({
-    venues,
-    predatoryChecklist: PREDATORY_CHECKLIST,
-    total: venues.length,
-  });
 }

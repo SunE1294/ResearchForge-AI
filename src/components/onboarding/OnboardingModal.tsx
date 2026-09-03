@@ -63,9 +63,9 @@ export function OnboardingModal() {
   const currentDeptInfo = getDepartmentByCode(departmentCode);
   const filteredDepartments = getDepartmentsByFaculty(facultyCode);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setUserProfile({
+    const updatedProfile = {
       name,
       institution,
       academicLevel,
@@ -74,9 +74,30 @@ export function OnboardingModal() {
       primaryInterest,
       skillLevel,
       targetTimelineWeeks
-    });
+    };
+    setUserProfile(updatedProfile);
     setHasCompletedOnboarding(true);
     setShowOnboardingModal(false);
+
+    // Sync directly with Supabase PostgreSQL
+    try {
+      await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: "00000000-0000-0000-0000-000000000001",
+          fullName: name,
+          institution,
+          facultyCode,
+          departmentCode,
+          primaryInterest,
+          academicLevel,
+          skillLevel,
+        }),
+      });
+    } catch (err) {
+      console.warn("Notice: profile sync to database", err);
+    }
   };
 
   // If not completed onboarding yet, always keep modal visible
