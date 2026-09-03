@@ -1,4 +1,4 @@
-export type FacultyCode = "FSIT" | "FE" | "FBE" | "FHLS" | "FHSS";
+export type FacultyCode = "FSIT" | "FE" | "FBE" | "FHLS" | "FHSS" | "OTHER";
 
 export type DepartmentCode =
   // FSIT
@@ -93,6 +93,7 @@ export interface UserProfile {
   thesisTitle?: string;
   targetTimelineWeeks: number;
   customDepartmentName?: string;
+  customFacultyName?: string;
 }
 
 export interface Paper {

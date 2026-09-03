@@ -43,6 +43,13 @@ export const FACULTIES: FacultyMeta[] = [
     nameBn: "মানবিক ও সামাজিক বিজ্ঞান অনুষদ",
     description: "Hermeneutic analysis, statutory jurisprudence, qualitative fieldwork, and thematic media discourse.",
     descriptionBn: "গুণগত ক্ষেত্র গবেষণা, আইন ও আইনি ব্যাখ্যা, সাহিত্য ও মিডিয়া বিশ্লেষণ।"
+  },
+  {
+    code: "OTHER",
+    name: "Other Faculty (Type Custom...)",
+    nameBn: "অন্যান্য অনুষদ (নিজে লিখুন...)",
+    description: "Custom or multidisciplinary institutional faculty structure across universities.",
+    descriptionBn: "বহুবিষয়ক বা কাস্টম প্রাতিষ্ঠানিক অনুষদ কাঠামো।"
   }
 ];
 
@@ -442,29 +449,54 @@ export const DEPARTMENTS: DepartmentInfo[] = [
   }
 ];
 
-export function getDepartmentByCode(code: string, customName?: string): DepartmentInfo | undefined {
+export function getDepartmentByCode(
+  code: string,
+  customDeptName?: string,
+  customFacultyName?: string
+): DepartmentInfo | undefined {
   if (code === "OTHER") {
-    const displayName = customName && customName.trim() ? customName.trim() : "Custom Department";
+    const displayName = customDeptName && customDeptName.trim() ? customDeptName.trim() : "Custom Department";
+    const displayFaculty = customFacultyName && customFacultyName.trim() ? customFacultyName.trim() : "Institutional Faculty";
     return {
       code: "OTHER",
       name: displayName,
       nameBn: displayName,
-      facultyCode: "FSIT",
-      facultyName: "Institutional Faculty",
-      facultyNameBn: "প্রাতিষ্ঠানিক অনুষদ",
+      facultyCode: "OTHER",
+      facultyName: displayFaculty,
+      facultyNameBn: displayFaculty,
       archetype: "High Compute (PyTorch, Colab, Kaggle, LaTeX)",
       recommendedCitation: "IEEE",
       primaryTools: ["Google Colab / Kaggle", "Overleaf (LaTeX)", "Zotero / Mendeley", "Python / R", "GitHub"],
       keyVenues: ["Interdisciplinary Academic Journals", "Peer-Reviewed Conferences"],
       benchmarkDatasets: ["Kaggle Competitions & Open Data", "UCI Machine Learning Repository", "Hugging Face Hub"],
       methodologyFocus: ["Empirical Evaluation", "Ablation Studies", "Comparative Benchmarking", "Reproducible Research Framework"],
-      description: `Custom academic discipline (${displayName}) with multi-disciplinary research tooling and verified pipelines.`,
-      descriptionBn: `কাস্টম একাডেমিক বিভাগ (${displayName}) - বহুমুখী গবেষণা টুলস ও কাঠামোগত পাইপলাইন।`
+      description: `Custom academic discipline (${displayName}, ${displayFaculty}) with multi-disciplinary research tooling and verified pipelines.`,
+      descriptionBn: `কাস্টম একাডেমিক বিভাগ ও অনুষদ (${displayName}, ${displayFaculty}) - বহুমুখী গবেষণা টুলস ও কাঠামোগত পাইপলাইন।`
     };
   }
   return DEPARTMENTS.find((d) => d.code === code);
 }
 
 export function getDepartmentsByFaculty(facultyCode: FacultyCode): DepartmentInfo[] {
+  if (facultyCode === "OTHER") {
+    return [
+      {
+        code: "OTHER",
+        name: "Other Department (Type Custom...)",
+        nameBn: "অন্যান্য বিভাগ (নিজে লিখুন...)",
+        facultyCode: "OTHER",
+        facultyName: "Other Faculty",
+        facultyNameBn: "অন্যান্য অনুষদ",
+        archetype: "High Compute (PyTorch, Colab, Kaggle, LaTeX)",
+        recommendedCitation: "IEEE",
+        primaryTools: ["Google Colab / Kaggle", "Overleaf (LaTeX)", "Zotero / Mendeley", "Python / R"],
+        keyVenues: ["Interdisciplinary Journals", "Academic Conferences"],
+        benchmarkDatasets: ["Open Data Repositories", "Kaggle", "Hugging Face"],
+        methodologyFocus: ["Scientific Inquiry", "Empirical Analysis"],
+        description: "Custom academic department with discipline-aware research tools.",
+        descriptionBn: "কাস্টম একাডেমিক বিভাগ ও গবেষণার উপযোগী টুলস।"
+      }
+    ];
+  }
   return DEPARTMENTS.filter((d) => d.facultyCode === facultyCode);
 }

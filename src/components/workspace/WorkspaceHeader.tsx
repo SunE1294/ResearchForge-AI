@@ -20,7 +20,7 @@ export function WorkspaceHeader() {
   const { userProfile, locale, setShowOnboardingModal, currentRoadmap, savedPaperIds } = useResearchStore();
   const { t } = useI18n(locale);
 
-  const deptInfo = getDepartmentByCode(userProfile.departmentCode, userProfile.customDepartmentName);
+  const deptInfo = getDepartmentByCode(userProfile.departmentCode, userProfile.customDepartmentName, userProfile.customFacultyName);
 
   // Compute completed milestones
   const totalTasks = currentRoadmap?.tasks?.length || 0;

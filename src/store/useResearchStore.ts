@@ -34,7 +34,8 @@ const DEFAULT_PROFILE: UserProfile = {
   academicLevel: "undergraduate",
   skillLevel: "beginner",
   targetTimelineWeeks: 16,
-  customDepartmentName: ""
+  customDepartmentName: "",
+  customFacultyName: ""
 };
 
 export const useResearchStore = create<ResearchStore>()(
