@@ -17,7 +17,7 @@ export default function EthicalAiPage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
           <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Phase D &bull; Ethical AI Governance & Academic Integrity</span>
+          <span>{locale === "bn" ? "পর্যায় ঘ • এআই নীতি ও অ্যাকাডেমিক সততা ফ্রেমওয়ার্ক" : "Phase D • Ethical AI Governance & Academic Integrity"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t("ethicalAi.title")}

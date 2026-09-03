@@ -16,7 +16,7 @@ export default function ComputePage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900">
           <Cpu className="w-3.5 h-3.5" />
-          <span>Phase D &bull; Cloud Compute & GPU Navigator</span>
+          <span>{locale === "bn" ? "পর্যায় ঘ • ক্লাউড কম্পিউট ও জিপিইউ নেভিগেটর" : "Phase D • Cloud Compute & GPU Navigator"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t("compute.title")}

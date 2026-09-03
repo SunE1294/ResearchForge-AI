@@ -7,7 +7,7 @@ import { useResearchStore } from "@/store/useResearchStore";
 import { Database, ExternalLink, Filter, Search, Tag, Loader2 } from "lucide-react";
 
 export function DatasetFinder() {
-  const { userProfile } = useResearchStore();
+  const { userProfile, locale } = useResearchStore();
   const [selectedFaculty, setSelectedFaculty] = useState<string>("ALL");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [datasets, setDatasets] = useState<DatasetItem[]>(BENCHMARK_DATASETS);
@@ -41,6 +41,7 @@ export function DatasetFinder() {
       searchTerm === "" ||
       ds.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       ds.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (ds.descriptionBn && ds.descriptionBn.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (ds.tags && ds.tags.some((t) => t.toLowerCase().includes(searchTerm.toLowerCase())));
     return matchesSearch;
   });
@@ -55,7 +56,7 @@ export function DatasetFinder() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search datasets, modalities, or tags..."
+            placeholder={locale === "bn" ? "ডেটাসেট, মোডালিটি বা ট্যাগ দিয়ে খুঁজুন..." : "Search datasets, modalities, or tags..."}
             className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400"
           />
         </div>
@@ -71,17 +72,21 @@ export function DatasetFinder() {
                   : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
               }`}
             >
-              {fac === "ALL" ? "All Faculties" : fac}
+              {fac === "ALL" ? (locale === "bn" ? "সকল অনুষদ" : "All Faculties") : fac}
             </button>
           ))}
         </div>
       </div>
 
       <div className="flex items-center justify-between text-[11px] text-slate-500">
-        <span>Displaying {filtered.length} benchmark datasets</span>
+        <span>
+          {locale === "bn"
+            ? `${filtered.length} টি বেঞ্চমার্ক ডেটাসেট প্রদর্শিত হচ্ছে`
+            : `Displaying ${filtered.length} benchmark datasets`}
+        </span>
         <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          Live Source: {dataSource}
+          {locale === "bn" ? "সরাসরি উৎস:" : "Live Source:"} {dataSource}
         </span>
       </div>
 
@@ -89,7 +94,9 @@ export function DatasetFinder() {
       {isLoading ? (
         <div className="p-12 text-center">
           <Loader2 className="w-6 h-6 animate-spin text-indigo-600 dark:text-cyan-400 mx-auto" />
-          <span className="text-slate-500 mt-2 block">Loading datasets from Supabase...</span>
+          <span className="text-slate-500 mt-2 block">
+            {locale === "bn" ? "ডাটাবেজ থেকে ডেটাসেট লোড হচ্ছে..." : "Loading datasets from Supabase..."}
+          </span>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -112,7 +119,7 @@ export function DatasetFinder() {
                   {dataset.title}
                 </h4>
                 <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                  {dataset.description}
+                  {locale === "bn" ? (dataset.descriptionBn || dataset.description) : dataset.description}
                 </p>
 
                 {dataset.tags && (
@@ -131,7 +138,7 @@ export function DatasetFinder() {
 
               <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <span className="text-[11px] text-slate-500 font-medium">
-                  Format: <span className="font-semibold text-slate-700 dark:text-slate-300">{(dataset.format || []).join(", ")}</span>
+                  {locale === "bn" ? "ফরম্যাট:" : "Format:"} <span className="font-semibold text-slate-700 dark:text-slate-300">{(dataset.format || []).join(", ")}</span>
                 </span>
 
                 <a
@@ -140,7 +147,7 @@ export function DatasetFinder() {
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 font-bold hover:opacity-90 transition-opacity"
                 >
-                  <span>Access Repository</span>
+                  <span>{locale === "bn" ? "রিপোজিটরি দেখুন" : "Access Repository"}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>

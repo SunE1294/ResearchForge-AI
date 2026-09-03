@@ -89,7 +89,9 @@ export default function WorkspacePage() {
               {t("workspace.jumpIn")}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Coordinated academic phases moving your thesis from problem definition to publication.
+              {locale === "bn"
+                ? "সমস্যার বিবরণ থেকে শুরু করে প্রকাশনা পর্যন্ত গবেষণার প্রতিটি ধাপ সাজানো রয়েছে।"
+                : "Coordinated academic phases moving your thesis from problem definition to publication."}
             </p>
           </div>
         </div>
@@ -106,7 +108,7 @@ export default function WorkspacePage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                      {card.phase}
+                      {locale === "bn" ? card.phase.replace("Phase", "পর্যায়") : card.phase}
                     </span>
                     <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
                       <Icon className="w-4 h-4" />
@@ -124,7 +126,7 @@ export default function WorkspacePage() {
                 </div>
 
                 <div className="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-xs font-bold text-indigo-600 dark:text-cyan-400">
-                  <span>Enter Module</span>
+                  <span>{locale === "bn" ? "মডিউলে প্রবেশ করুন" : "Enter Module"}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>
@@ -140,17 +142,17 @@ export default function WorkspacePage() {
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 mb-1">
                 <GraduationCap className="w-3.5 h-3.5" />
-                <span>Department Blueprint</span>
+                <span>{locale === "bn" ? "বিভাগীয় ব্লুপ্রিন্ট ও রূপরেখা" : "Department Blueprint"}</span>
               </div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                {deptInfo.facultyCode} &bull; {deptInfo.name} ({deptInfo.nameBn})
+                {deptInfo.facultyCode} &bull; {locale === "bn" ? (deptInfo.nameBn || deptInfo.name) : deptInfo.name}
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                {deptInfo.description}
+                {locale === "bn" ? (deptInfo.descriptionBn || deptInfo.description) : deptInfo.description}
               </p>
             </div>
             <span className="self-start sm:self-center px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-              Citation: {deptInfo.recommendedCitation}
+              {locale === "bn" ? "প্রস্তাবিত সাইটেশন শৈলী:" : "Citation:"} {deptInfo.recommendedCitation}
             </span>
           </div>
 
@@ -159,7 +161,7 @@ export default function WorkspacePage() {
             <div className="space-y-2">
               <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <Cpu className="w-4 h-4 text-indigo-500 dark:text-cyan-400" />
-                Recommended Tool Stack
+                {locale === "bn" ? "প্রস্তাবিত টুলস ও সফটওয়্যার" : "Recommended Tool Stack"}
               </span>
               <ul className="space-y-1.5">
                 {deptInfo.primaryTools.map((tool, idx) => (
@@ -174,7 +176,7 @@ export default function WorkspacePage() {
             <div className="space-y-2">
               <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <Database className="w-4 h-4 text-cyan-500" />
-                Benchmark Datasets
+                {locale === "bn" ? "বেঞ্চমার্ক ডেটাসেট ও রিসোর্স" : "Benchmark Datasets"}
               </span>
               <ul className="space-y-1.5">
                 {deptInfo.benchmarkDatasets.map((dataset, idx) => (
@@ -189,7 +191,7 @@ export default function WorkspacePage() {
             <div className="space-y-2">
               <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <Layers className="w-4 h-4 text-emerald-500" />
-                Core Methodologies
+                {locale === "bn" ? "প্রধান গবেষণাপদ্ধতি ও ফ্রেমওয়ার্ক" : "Core Methodologies"}
               </span>
               <ul className="space-y-1.5">
                 {deptInfo.methodologyFocus.map((method, idx) => (

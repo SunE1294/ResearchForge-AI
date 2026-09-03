@@ -29,7 +29,7 @@ export default function FoundationsPage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-cyan-300 border border-blue-200 dark:border-blue-900">
           <BookOpen className="w-3.5 h-3.5" />
-          <span>Phase B &bull; Academic Knowledge Base</span>
+          <span>{locale === "bn" ? "পর্যায় খ • অ্যাকাডেমিক জ্ঞানভাণ্ডার" : "Phase B • Academic Knowledge Base"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t("foundations.title")}

@@ -16,7 +16,7 @@ export default function MilestonesPage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900">
           <CheckCircle2 className="w-3.5 h-3.5" />
-          <span>Phase D &bull; Active Research Execution Workspace</span>
+          <span>{locale === "bn" ? "পর্যায় ঘ • সক্রিয় থিসিস এক্সিকিউশন ওয়ার্কস্পেস" : "Phase D • Active Research Execution Workspace"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t("milestones.title")}

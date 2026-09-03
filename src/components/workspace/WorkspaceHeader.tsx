@@ -46,7 +46,7 @@ export function WorkspaceHeader() {
               </div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                <span>Supabase PostgreSQL Connected</span>
+                <span>{locale === "bn" ? "সুপাবেজ ডাটাবেজ সংযুক্ত" : "Supabase PostgreSQL Connected"}</span>
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
@@ -98,7 +98,7 @@ export function WorkspaceHeader() {
                   {deptInfo.recommendedCitation} Standard
                 </span>
                 <span className="text-[11px] text-cyan-200/80 block">
-                  Discipline Baseline Ref
+                  {locale === "bn" ? "বিষয়ভিত্তিক রেফারেন্স মানদণ্ড" : "Discipline Baseline Ref"}
                 </span>
               </div>
             </div>
@@ -143,7 +143,7 @@ export function WorkspaceHeader() {
             <div className="flex items-center gap-1.5 mt-1">
               <FileText className="w-4 h-4 text-indigo-400" />
               <span className="text-lg font-bold text-white">{savedPaperIds.length}</span>
-              <span className="text-[10px] text-slate-400">Bookmarked</span>
+              <span className="text-[10px] text-slate-400">{locale === "bn" ? "সংরক্ষিত" : "Bookmarked"}</span>
             </div>
           </div>
 

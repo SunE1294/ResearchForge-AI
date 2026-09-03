@@ -7,7 +7,7 @@ import { useResearchStore } from "@/store/useResearchStore";
 import { ExternalLink, Award, Sparkles, Filter, Calendar, Loader2 } from "lucide-react";
 
 export function VenueList() {
-  const { userProfile } = useResearchStore();
+  const { userProfile, locale } = useResearchStore();
   const [filterDeptOnly, setFilterDeptOnly] = useState<boolean>(true);
   const [venues, setVenues] = useState<VenueItem[]>(KEY_VENUES);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +40,9 @@ export function VenueList() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-slate-600 dark:text-slate-400">
-            Showing {venues.length} high-impact indexed venues
+            {locale === "bn"
+              ? `${venues.length} টি শীর্ষ ইনডেক্সড ভেন্যু প্রদর্শিত হচ্ছে`
+              : `Showing ${venues.length} high-impact indexed venues`}
           </span>
           <span className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -53,14 +55,20 @@ export function VenueList() {
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold transition"
         >
           <Filter className="w-3.5 h-3.5 text-indigo-500 dark:text-cyan-400" />
-          <span>{filterDeptOnly ? `Showing ${userProfile.departmentCode} Venues` : "Show All Disciplines"}</span>
+          <span>
+            {filterDeptOnly
+              ? (locale === "bn" ? `শুধুমাত্র ${userProfile.departmentCode} ভেন্যু` : `Showing ${userProfile.departmentCode} Venues`)
+              : (locale === "bn" ? "সকল বিভাগের ভেন্যু দেখুন" : "Show All Disciplines")}
+          </span>
         </button>
       </div>
 
       {isLoading ? (
         <div className="p-12 text-center">
           <Loader2 className="w-6 h-6 animate-spin text-indigo-600 dark:text-cyan-400 mx-auto" />
-          <span className="text-slate-500 mt-2 block">Loading venues from Supabase...</span>
+          <span className="text-slate-500 mt-2 block">
+            {locale === "bn" ? "ডাটাবেজ থেকে ভেন্যু তালিকা লোড হচ্ছে..." : "Loading venues from Supabase..."}
+          </span>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -84,7 +92,7 @@ export function VenueList() {
                     {venue.name}
                   </span>
                   <span className="text-[11px] text-indigo-600 dark:text-cyan-400 font-semibold block">
-                    Acronym: {venue.acronym}
+                    {locale === "bn" ? "সংক্ষিপ্ত রূপ:" : "Acronym:"} {venue.acronym}
                   </span>
                 </div>
 
@@ -121,7 +129,7 @@ export function VenueList() {
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold hover:bg-indigo-600 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-slate-950 transition-colors"
                 >
-                  <span>Call for Papers & Aims</span>
+                  <span>{locale === "bn" ? "কল ফর পেপার্স ও ওয়েবসাইট" : "Call for Papers & Aims"}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>

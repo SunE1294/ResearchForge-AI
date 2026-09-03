@@ -20,7 +20,7 @@ interface PaperSearchCardProps {
 }
 
 export function PaperSearchCard({ paper }: PaperSearchCardProps) {
-  const { savedPaperIds, toggleSavePaper } = useResearchStore();
+  const { savedPaperIds, toggleSavePaper, locale } = useResearchStore();
   const [showBibtex, setShowBibtex] = useState(false);
   const [copiedBib, setCopiedBib] = useState(false);
   const [expandedAbstract, setExpandedAbstract] = useState(false);
@@ -62,7 +62,7 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
         });
       }
     } catch (e) {
-      console.warn("Notice: Paper bookmark sync to database", e);
+      console.warn("Supabase paper bookmark sync failed, state preserved locally:", e);
     }
   };
 
@@ -73,35 +73,36 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
   };
 
   return (
-    <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all space-y-3">
-      {/* Header: Title & Bookmark */}
-      <div className="flex items-start justify-between gap-3">
+    <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow space-y-3.5">
+      {/* Top Meta Line */}
+      <div className="flex items-start justify-between gap-4">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 border border-indigo-200/50 dark:border-indigo-900/50">
-              {paper.source}
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 border border-indigo-200/50 dark:border-indigo-900/50">
+              {paper.venue} &bull; {paper.year}
             </span>
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-              {paper.venue} ({paper.year})
+              {formatCitationCount(paper.citationCount)} citations
             </span>
-            <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
-              ★ {formatCitationCount(paper.citationCount)} Citations
-            </span>
+            {paper.openAccessUrl && (
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-900/60">
+                {locale === "bn" ? "ওপেন এক্সেস" : "Open Access"}
+              </span>
+            )}
           </div>
-
-          <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
             {paper.title}
           </h3>
         </div>
 
         <button
           onClick={handleToggleSave}
-          className={`p-2 rounded-xl border transition-colors shrink-0 ${
+          className={`p-2 rounded-xl border transition-all shrink-0 ${
             isSaved
               ? "bg-indigo-600 text-white border-indigo-600 dark:bg-cyan-500 dark:text-slate-950"
               : "border-slate-200 dark:border-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-white"
           }`}
-          title={isSaved ? "Saved to your literature list" : "Save for thesis"}
+          title={isSaved ? (locale === "bn" ? "সংরক্ষিত তালিকাভুক্ত" : "Saved to your literature list") : (locale === "bn" ? "থিসিসের জন্য সংরক্ষণ করুন" : "Save for thesis")}
         >
           <Bookmark className="w-4 h-4 fill-current" />
         </button>
@@ -109,7 +110,9 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
 
       {/* Authors */}
       <div className="text-xs text-slate-600 dark:text-slate-400">
-        <span className="font-semibold text-slate-700 dark:text-slate-300">Authors:</span>{" "}
+        <span className="font-semibold text-slate-700 dark:text-slate-300">
+          {locale === "bn" ? "লেখকবৃন্দ:" : "Authors:"}
+        </span>{" "}
         {paper.authors.join(", ")}
       </div>
 
@@ -123,7 +126,7 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
             onClick={() => setExpandedAbstract(!expandedAbstract)}
             className="text-[11px] font-bold text-indigo-600 dark:text-cyan-400 hover:underline mt-0.5"
           >
-            {expandedAbstract ? "Show less" : "Read full abstract"}
+            {expandedAbstract ? (locale === "bn" ? "সংক্ষেপ করুন" : "Show less") : (locale === "bn" ? "সম্পূর্ণ এবস্ট্রাক্ট পড়ুন" : "Read full abstract")}
           </button>
         )}
       </div>
@@ -153,7 +156,7 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/60 font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              <span>Read Open Access PDF</span>
+              <span>{locale === "bn" ? "ওপেন এক্সেস পিডিএফ পড়ুন" : "Read Open Access PDF"}</span>
             </a>
           )}
           {paper.doi && (
@@ -179,18 +182,15 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
 
       {/* BibTeX Flyout */}
       {showBibtex && (
-        <div className="p-3.5 rounded-xl bg-slate-900 text-slate-200 border border-slate-800 font-mono text-[11px] space-y-2">
-          <div className="flex items-center justify-between text-slate-400">
-            <span>BibTeX Citation Record</span>
-            <button
-              onClick={copyBibtex}
-              className="flex items-center gap-1 text-cyan-400 hover:underline"
-            >
-              {copiedBib ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedBib ? "Copied!" : "Copy"}</span>
-            </button>
-          </div>
-          <pre className="overflow-x-auto whitespace-pre-wrap">{bibtexContent}</pre>
+        <div className="relative rounded-xl bg-slate-950 text-slate-200 p-3 font-mono text-[11px] overflow-x-auto border border-slate-800">
+          <button
+            onClick={copyBibtex}
+            className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded bg-slate-800 text-slate-300 hover:text-white text-[10px]"
+          >
+            {copiedBib ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+            <span>{copiedBib ? (locale === "bn" ? "কপি হয়েছে!" : "Copied!") : (locale === "bn" ? "কপি করুন" : "Copy")}</span>
+          </button>
+          <pre>{bibtexContent}</pre>
         </div>
       )}
     </div>

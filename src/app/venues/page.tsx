@@ -18,7 +18,7 @@ export default function VenuesPage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Phase C &bull; Venue Intelligence & Anti-Scam Shield</span>
+          <span>{locale === "bn" ? "পর্যায় গ • ভেন্যু ইনটেলিজেন্স ও অ্যান্টি-স্ক্যাম শিল্ড" : "Phase C • Venue Intelligence & Anti-Scam Shield"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t("venues.title")}

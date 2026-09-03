@@ -267,9 +267,9 @@ ${t.tips.map((tip) => `  - Tip: ${tip}`).join("\n")}`
                   onChange={(e) => setTimelineWeeks(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400 font-semibold"
                 >
-                  <option value={16}>16 Weeks (1-Semester Final)</option>
-                  <option value={24}>24 Weeks (2-Semester Capstone)</option>
-                  <option value={52}>52 Weeks (1-Year Master's)</option>
+                  <option value={16}>{locale === "bn" ? "১৬ সপ্তাহ (১ সেমিস্টার ফাইনাল)" : "16 Weeks (1-Semester Final)"}</option>
+                  <option value={24}>{locale === "bn" ? "২৪ সপ্তাহ (২ সেমিস্টার ক্যাপস্টোন)" : "24 Weeks (2-Semester Capstone)"}</option>
+                  <option value={52}>{locale === "bn" ? "৫২ সপ্তাহ (১ বছর মাস্টার্স)" : "52 Weeks (1-Year Master's)"}</option>
                 </select>
               </div>
 
@@ -298,15 +298,15 @@ ${t.tips.map((tip) => `  - Tip: ${tip}`).join("\n")}`
                     {currentRoadmap?.title}
                   </h3>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                    {completedCount} / {totalCount} Done
+                    {completedCount} / {totalCount} {locale === "bn" ? "সম্পন্ন" : "Done"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-500 text-xs mt-0.5">
-                  <span>Click any checkbox below to update your completion status.</span>
+                  <span>{locale === "bn" ? "অগ্রগতি আপডেট করতে নিচের যেকোনো চেকবক্সে টিক দিন।" : "Click any checkbox below to update your completion status."}</span>
                   <span>•</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    {dbSyncStatus}
+                    {locale === "bn" ? "সুপাবেজ পোস্টগ্রেসের সাথে সিঙ্কড" : dbSyncStatus}
                   </span>
                 </div>
               </div>
@@ -332,7 +332,7 @@ ${t.tips.map((tip) => `  - Tip: ${tip}`).join("\n")}`
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 dark:bg-cyan-500 text-white dark:text-slate-950 font-bold hover:opacity-90 transition"
                 >
                   <Printer className="w-3.5 h-3.5" />
-                  <span>Print View</span>
+                  <span>{locale === "bn" ? "প্রিন্ট ভিউ" : "Print View"}</span>
                 </button>
               </div>
             </div>
@@ -408,7 +408,9 @@ ${t.tips.map((tip) => `  - Tip: ${tip}`).join("\n")}`
                   {/* Deliverable Pill & Tips */}
                   <div className="pt-2 pl-8 border-t border-slate-100 dark:border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]">
                     <div className="text-slate-700 dark:text-slate-300">
-                      <span className="font-bold text-indigo-600 dark:text-cyan-400">Target Deliverable:</span>{" "}
+                      <span className="font-bold text-indigo-600 dark:text-cyan-400">
+                        {locale === "bn" ? "টার্গেট ডেলিভারেবল:" : "Target Deliverable:"}
+                      </span>{" "}
                       {task.deliverable}
                     </div>
 

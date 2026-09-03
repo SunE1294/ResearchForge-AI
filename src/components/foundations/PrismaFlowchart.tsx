@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import { useResearchStore } from "@/store/useResearchStore";
 import { Layers, ArrowDown, Download, CheckCircle2 } from "lucide-react";
 
 export function PrismaFlowchart() {
+  const { locale } = useResearchStore();
   const [identifiedDatabases, setIdentifiedDatabases] = useState<number>(342);
   const [identifiedRegisters, setIdentifiedRegisters] = useState<number>(45);
   const [duplicatesRemoved, setDuplicatesRemoved] = useState<number>(98);
@@ -22,10 +24,12 @@ export function PrismaFlowchart() {
       <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900 text-xs flex items-center justify-between">
         <div>
           <span className="font-bold text-indigo-700 dark:text-cyan-300 block">
-            PRISMA 2020 Flowchart Interactive Generator
+            {locale === "bn" ? "প্রিজমা ২০২০ (PRISMA 2020) ইন্টারঅ্যাক্টিভ ফ্লোচার্ট জেনারেটর" : "PRISMA 2020 Flowchart Interactive Generator"}
           </span>
           <span className="text-slate-600 dark:text-slate-400">
-            Customize screening numbers below. Your PRISMA diagram recalculates dynamically for thesis inclusion.
+            {locale === "bn"
+              ? "নিচে আপনার সার্চের সংখ্যাগুলো পরিবর্তন করুন। থিসিসে সংযুক্ত করার জন্য আপনার ফ্লোচার্টটি স্বয়ংক্রিয়ভাবে পুনর্গণনা হবে।"
+              : "Customize screening numbers below. Your PRISMA diagram recalculates dynamically for thesis inclusion."}
           </span>
         </div>
       </div>
@@ -34,12 +38,12 @@ export function PrismaFlowchart() {
         {/* Controls Column */}
         <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 text-xs">
           <h4 className="font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-            PRISMA Data Inputs
+            {locale === "bn" ? "প্রিজমা ডেটা ইনপুটসমূহ" : "PRISMA Data Inputs"}
           </h4>
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Records identified from databases (Scopus, IEEE, PubMed)
+              {locale === "bn" ? "ডাটাবেজ থেকে প্রাপ্ত মোট রেকর্ড (Scopus, IEEE, PubMed)" : "Records identified from databases (Scopus, IEEE, PubMed)"}
             </label>
             <input
               type="number"
@@ -51,7 +55,7 @@ export function PrismaFlowchart() {
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Records from citation searching / other registers
+              {locale === "bn" ? "অন্যান্য উৎস বা সাইটেশন রেজিস্টার থেকে প্রাপ্ত" : "Records from citation searching / other registers"}
             </label>
             <input
               type="number"
@@ -63,7 +67,7 @@ export function PrismaFlowchart() {
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Duplicate records removed
+              {locale === "bn" ? "ডুপ্লিকেট রেকর্ড অপসারণের সংখ্যা" : "Duplicate records removed"}
             </label>
             <input
               type="number"
@@ -75,7 +79,7 @@ export function PrismaFlowchart() {
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Records excluded during Title / Abstract screening
+              {locale === "bn" ? "শিরোনাম ও এবস্ট্রাক্ট স্ক্রিনিংয়ে বাদ দেওয়া রেকর্ড" : "Records excluded during Title / Abstract screening"}
             </label>
             <input
               type="number"
@@ -87,7 +91,7 @@ export function PrismaFlowchart() {
 
           <div>
             <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Full-text articles excluded with reasons (Count)
+              {locale === "bn" ? "পূর্ণাঙ্গ পেপার যাচাই শেষে বাদ দেওয়া রিপোর্ট (সংখ্যা)" : "Full-text articles excluded with reasons (Count)"}
             </label>
             <input
               type="number"
@@ -103,13 +107,13 @@ export function PrismaFlowchart() {
           {/* Phase 1: Identification */}
           <div className="w-full max-w-md p-3.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-center space-y-1">
             <span className="font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider text-[10px] block">
-              1. Identification
+              {locale === "bn" ? "১. প্রাথমিক শনাক্তকরণ (Identification)" : "1. Identification"}
             </span>
             <div className="text-slate-800 dark:text-slate-200 font-semibold">
-              Total Records Identified: <span className="font-extrabold text-blue-600 dark:text-cyan-400">{totalIdentified}</span>
+              {locale === "bn" ? "মোট শনাক্তকৃত রেকর্ড:" : "Total Records Identified:"} <span className="font-extrabold text-blue-600 dark:text-cyan-400">{totalIdentified}</span>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400">
-              Databases (n = {identifiedDatabases}) | Other Sources (n = {identifiedRegisters})
+              {locale === "bn" ? `ডাটাবেজ (n = ${identifiedDatabases}) | অন্যান্য উৎস (n = ${identifiedRegisters})` : `Databases (n = ${identifiedDatabases}) | Other Sources (n = ${identifiedRegisters})`}
             </div>
           </div>
 
@@ -118,23 +122,24 @@ export function PrismaFlowchart() {
           {/* Phase 2: Screening */}
           <div className="w-full max-w-md grid grid-cols-2 gap-3">
             <div className="p-3.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 text-center space-y-1">
-              <span className="font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider text-[10px] block">
-                2. Screening
+              <span className="font-bold text-indigo-700 dark:text-cyan-300 uppercase tracking-wider text-[10px] block">
+                {locale === "bn" ? "২. প্রাথমিক বাছাই (Screening)" : "2. Screening"}
               </span>
-              <div className="text-slate-800 dark:text-slate-200 font-semibold">
-                Records Screened: <span className="font-extrabold text-indigo-600 dark:text-cyan-400">{screenedCount}</span>
+              <div className="font-bold text-indigo-900 dark:text-white">
+                {locale === "bn" ? "বাছাইকৃত রেকর্ড:" : "Records Screened:"} <span className="text-indigo-600 dark:text-cyan-400">{screenedCount}</span>
               </div>
-              <div className="text-[10px] text-slate-500">Duplicates removed (n = {duplicatesRemoved})</div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 text-center space-y-1">
+            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 text-center space-y-1">
               <span className="font-bold text-rose-700 dark:text-rose-300 uppercase tracking-wider text-[10px] block">
-                Excluded
+                {locale === "bn" ? "বর্জিত (Excluded)" : "Excluded"}
               </span>
-              <div className="text-rose-800 dark:text-rose-200 font-semibold">
-                Excluded (n = {recordsExcluded})
+              <div className="font-bold text-rose-800 dark:text-rose-200">
+                {locale === "bn" ? `ডুপ্লিকেট: ${duplicatesRemoved}` : `Duplicates: ${duplicatesRemoved}`}
               </div>
-              <div className="text-[10px] text-slate-500">Based on Title/Abstract</div>
+              <div className="text-[10px] text-rose-600 dark:text-rose-400">
+                {locale === "bn" ? `অপ্রাসঙ্গিক: ${recordsExcluded}` : `Irrelevant: ${recordsExcluded}`}
+              </div>
             </div>
           </div>
 
@@ -144,39 +149,39 @@ export function PrismaFlowchart() {
           <div className="w-full max-w-md grid grid-cols-2 gap-3">
             <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-center space-y-1">
               <span className="font-bold text-amber-700 dark:text-amber-300 uppercase tracking-wider text-[10px] block">
-                3. Eligibility
+                {locale === "bn" ? "৩. যোগ্যতা নিরূপণ (Eligibility)" : "3. Eligibility"}
               </span>
-              <div className="text-slate-800 dark:text-slate-200 font-semibold">
-                Full-Text Assessed: <span className="font-extrabold text-amber-600 dark:text-amber-400">{fullTextAssessed}</span>
+              <div className="font-bold text-amber-900 dark:text-amber-200">
+                {locale === "bn" ? "পূর্ণাঙ্গ পাঠ মূল্যায়ন:" : "Full-text Assessed:"} <span className="text-amber-600 dark:text-amber-400">{fullTextAssessed}</span>
               </div>
-              <div className="text-[10px] text-slate-500">Evaluated against criteria</div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 text-center space-y-1">
-              <span className="font-bold text-rose-700 dark:text-rose-300 uppercase tracking-wider text-[10px] block">
-                Reports Excluded
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 text-center space-y-1">
+              <span className="font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[10px] block">
+                {locale === "bn" ? "যৌক্তিক বর্জন" : "Excluded with Reasons"}
               </span>
-              <div className="text-rose-800 dark:text-rose-200 font-semibold">
-                Excluded (n = {reportsExcludedCount})
+              <div className="font-bold text-slate-800 dark:text-slate-200">
+                n = {reportsExcludedCount}
               </div>
-              <div className="text-[10px] text-slate-500">With explicit reasons</div>
             </div>
           </div>
 
           <ArrowDown className="w-4 h-4 text-slate-400" />
 
           {/* Phase 4: Included */}
-          <div className="w-full max-w-md p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-500 text-center space-y-1 shadow-sm">
-            <span className="font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider text-[11px] block flex items-center justify-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              4. Final Studies Included in Synthesis
+          <div className="w-full max-w-md p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-500/60 text-center space-y-1 shadow-sm">
+            <span className="font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider text-[10px] flex items-center justify-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+              <span>{locale === "bn" ? "৪. চূড়ান্ত অন্তর্ভুক্তি (Included)" : "4. Included in SLR / Review"}</span>
             </span>
-            <div className="text-lg font-black text-emerald-700 dark:text-emerald-300">
-              n = {includedCount} Studies
+            <div className="text-base font-extrabold text-emerald-900 dark:text-emerald-100">
+              {locale === "bn" ? "চূড়ান্ত নির্বাচিত স্টাডিজ:" : "Final Included Studies:"} <span className="text-emerald-600 dark:text-emerald-400">{includedCount}</span>
             </div>
-            <div className="text-[11px] text-slate-600 dark:text-slate-400">
-              Included in final qualitative & quantitative meta-analysis
-            </div>
+            <p className="text-[11px] text-emerald-700/80 dark:text-emerald-300/80">
+              {locale === "bn"
+                ? "এই নির্বাচিত পেপারগুলো আপনার থিসিসের চূড়ান্ত কোয়ান্টিটেটিভ মেটা-অ্যানালাইসিসের ভিত্তি।"
+                : "Eligible studies progressing to final qualitative synthesis and meta-analysis."}
+            </p>
           </div>
         </div>
       </div>

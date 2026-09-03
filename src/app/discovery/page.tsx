@@ -72,7 +72,7 @@ export default function DiscoveryPage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 border border-indigo-200 dark:border-indigo-900">
           <Compass className="w-3.5 h-3.5" />
-          <span>Phase C &bull; Academic Discovery Pipeline</span>
+          <span>{locale === "bn" ? "পর্যায় গ • অ্যাকাডেমিক ডিসকভারি পাইপলাইন" : "Phase C • Academic Discovery Pipeline"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {t("discovery.title")}
@@ -126,7 +126,7 @@ export default function DiscoveryPage() {
                   : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
               }`}
             >
-              Indexed Papers ({papers.length})
+              {locale === "bn" ? `ইনডেক্সড পেপারসমূহ (${papers.length})` : `Indexed Papers (${papers.length})`}
             </button>
             <button
               onClick={() => setActiveTab("datasets")}
@@ -137,7 +137,7 @@ export default function DiscoveryPage() {
               }`}
             >
               <Database className="w-3.5 h-3.5" />
-              <span>Curated Datasets</span>
+              <span>{locale === "bn" ? "বেঞ্চমার্ক ডেটাসেট" : "Curated Datasets"}</span>
             </button>
             <button
               onClick={() => setActiveTab("bookmarks")}
@@ -148,7 +148,7 @@ export default function DiscoveryPage() {
               }`}
             >
               <Bookmark className="w-3.5 h-3.5" />
-              <span>Bookmarked ({savedPaperIds.length})</span>
+              <span>{locale === "bn" ? `সংরক্ষিত (${savedPaperIds.length})` : `Bookmarked (${savedPaperIds.length})`}</span>
             </button>
           </div>
 
