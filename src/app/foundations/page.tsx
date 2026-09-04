@@ -8,7 +8,8 @@ import { ThreePassReader } from "@/components/foundations/ThreePassReader";
 import { ImradBreakdown } from "@/components/foundations/ImradBreakdown";
 import { PrismaFlowchart } from "@/components/foundations/PrismaFlowchart";
 import { ResearchGaps } from "@/components/foundations/ResearchGaps";
-import { BookOpen, Layers, Eye, FileText, GitFork } from "lucide-react";
+import { AcademicResourceHub } from "@/components/resources/AcademicResourceHub";
+import { BookOpen, Layers, Eye, FileText, GitFork, Globe } from "lucide-react";
 
 export default function FoundationsPage() {
   const { locale } = useResearchStore();
@@ -21,6 +22,7 @@ export default function FoundationsPage() {
     { id: "imrad", label: t("foundations.tabImrad"), icon: FileText },
     { id: "prisma", label: t("foundations.tabPrisma"), icon: BookOpen },
     { id: "gaps", label: t("foundations.tabGaps"), icon: GitFork },
+    { id: "resources", label: t("foundations.tabResourceHub"), icon: Globe },
   ];
 
   return (
@@ -68,6 +70,7 @@ export default function FoundationsPage() {
         {activeTab === "imrad" && <ImradBreakdown />}
         {activeTab === "prisma" && <PrismaFlowchart />}
         {activeTab === "gaps" && <ResearchGaps />}
+        {activeTab === "resources" && <AcademicResourceHub />}
       </div>
     </div>
   );

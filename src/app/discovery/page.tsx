@@ -7,6 +7,7 @@ import { getDepartmentByCode } from "@/data/taxonomy";
 import { PaperSearchCard } from "@/components/discovery/PaperSearchCard";
 import { DatasetFinder } from "@/components/discovery/DatasetFinder";
 import { QueryBuilderModal } from "@/components/discovery/QueryBuilderModal";
+import { AcademicResourceHub } from "@/components/resources/AcademicResourceHub";
 import { Paper } from "@/types";
 import {
   Compass,
@@ -16,7 +17,8 @@ import {
   BookOpen,
   Filter,
   Loader2,
-  Bookmark
+  Bookmark,
+  Globe
 } from "lucide-react";
 
 export default function DiscoveryPage() {
@@ -37,7 +39,7 @@ export default function DiscoveryPage() {
   const [searchQuery, setSearchQuery] = useState(initialTopic);
   const [papers, setPapers] = useState<Paper[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"papers" | "datasets" | "bookmarks">("papers");
+  const [activeTab, setActiveTab] = useState<"papers" | "datasets" | "bookmarks" | "hub">("papers");
   const [isQueryModalOpen, setIsQueryModalOpen] = useState(false);
   const [openAccessOnly, setOpenAccessOnly] = useState(false);
 
@@ -131,7 +133,7 @@ export default function DiscoveryPage() {
 
         {/* Quick Filter Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <button
               onClick={() => setActiveTab("papers")}
               className={`px-3 py-1.5 rounded-lg font-bold transition ${
@@ -154,6 +156,17 @@ export default function DiscoveryPage() {
               <span>{locale === "bn" ? "বেঞ্চমার্ক ডেটাসেট" : "Curated Datasets"}</span>
             </button>
             <button
+              onClick={() => setActiveTab("hub")}
+              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+                activeTab === "hub"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm"
+                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
+              }`}
+            >
+              <Globe className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{t("discovery.tabHub")}</span>
+            </button>
+            <button
               onClick={() => setActiveTab("bookmarks")}
               className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
                 activeTab === "bookmarks"
@@ -166,7 +179,7 @@ export default function DiscoveryPage() {
             </button>
           </div>
 
-          {activeTab !== "datasets" && (
+          {activeTab === "papers" && (
             <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-600 dark:text-slate-400">
               <input
                 type="checkbox"
@@ -181,7 +194,9 @@ export default function DiscoveryPage() {
       </div>
 
       {/* Main Content Area */}
-      {activeTab === "datasets" ? (
+      {activeTab === "hub" ? (
+        <AcademicResourceHub />
+      ) : activeTab === "datasets" ? (
         <DatasetFinder initialSearchQuery={searchQuery} />
       ) : (
         <div className="space-y-4">

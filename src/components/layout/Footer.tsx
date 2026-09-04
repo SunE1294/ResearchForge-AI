@@ -59,7 +59,12 @@ export function Footer() {
             </li>
             <li>
               <Link href="/ethical-ai" className="hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
-                Phase D: Ethical AI Navigator
+                Ethical AI Navigator
+              </Link>
+            </li>
+            <li>
+              <Link href="/venues" className="hover:text-indigo-600 dark:hover:text-cyan-400 transition-colors">
+                Venues & Resource Hub
               </Link>
             </li>
           </ul>

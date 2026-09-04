@@ -89,7 +89,8 @@
     "tabThreePass": "Three-Pass Reading Method",
     "tabImrad": "IMRAD Paper Anatomy",
     "tabPrisma": "PRISMA 2020 SLR Blueprint",
-    "tabGaps": "Research Gap Taxonomy"
+    "tabGaps": "Research Gap Taxonomy",
+    "tabResourceHub": "Academic Resource & Tooling Hub"
   },
   "discovery": {
     "title": "Literature & Dataset Discovery Engine",
@@ -102,6 +103,7 @@
     "emptyPrompt": "Search above to explore verified literature from OpenAlex and Semantic Scholar.",
     "tabPapers": "Indexed Papers",
     "tabDatasets": "Curated Datasets for Your Discipline",
+    "tabHub": "Academic Resource Hub & Portals",
     "filterYear": "All Years",
     "openAccessOnly": "Open Access Only",
     "citeBtn": "Cite (BibTeX)",
@@ -154,6 +156,7 @@
     "subtitle": "Identify reputable Scimago Q1-Q4 journals and CORE conferences while safeguarding your work from predatory scams.",
     "tabKeyVenues": "High-Impact Venues in Your Discipline",
     "tabAntiScam": "Predatory Journal Shield (Anti-Scam Checklist)",
+    "tabResourceHub": "Academic Resource Hub & Tooling Ecosystem",
     "antiScamSubtitle": "Never pay publication fees to an unverified entity. Run through this 5-point verification protocol before submitting.",
     "warningNotice": "Notice: Publishing in a predatory journal can disqualify your thesis defense and permanently damage your academic standing."
   }
