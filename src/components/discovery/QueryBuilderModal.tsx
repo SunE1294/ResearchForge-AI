@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
 import { useI18n } from "@/lib/i18n";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import { Sparkles, Copy, Check, X, ArrowRight, Database } from "lucide-react";
 
 interface QueryBuilderModalProps {
@@ -67,8 +68,9 @@ export function QueryBuilderModal({ isOpen, onClose, onApplyQuery }: QueryBuilde
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                {locale === "bn" ? "বুলিয়ান কুয়েরি অ্যাসিস্ট্যান্ট (Gemini AI)" : "Boolean Query Assistant (Gemini AI)"}
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white inline-flex items-center">
+                <span>{locale === "bn" ? "বুলিয়ান কুয়েরি অ্যাসিস্ট্যান্ট (Gemini AI)" : "Boolean Query Assistant (Gemini AI)"}</span>
+                <AcademicTooltip term="boolean" />
               </h3>
               <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 {locale === "bn"

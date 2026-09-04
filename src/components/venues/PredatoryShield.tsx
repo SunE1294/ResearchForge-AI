@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
 import { PREDATORY_CHECKLIST } from "@/data/venues";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import { ShieldAlert, AlertTriangle, CheckCircle, HelpCircle, ExternalLink } from "lucide-react";
 
 export function PredatoryShield() {
@@ -39,10 +40,13 @@ export function PredatoryShield() {
       {/* Audit Progress */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span className="font-bold text-slate-900 dark:text-white block text-sm">
-            {locale === "bn"
-              ? `ভেন্যু নিরাপত্তা যাচাই অডিট: ${verifiedCount} / ${totalPoints} টি ধাপ সম্পন্ন`
-              : `Venue Safety Verification Audit: ${verifiedCount} / ${totalPoints} Checked`}
+          <span className="font-bold text-slate-900 dark:text-white inline-flex items-center text-sm">
+            <span>
+              {locale === "bn"
+                ? `ভেন্যু নিরাপত্তা যাচাই অডিট: ${verifiedCount} / ${totalPoints} টি ধাপ সম্পন্ন`
+                : `Venue Safety Verification Audit: ${verifiedCount} / ${totalPoints} Checked`}
+            </span>
+            <AcademicTooltip term="scopus" />
           </span>
           <span className="text-slate-500 text-[11px]">
             {locale === "bn"

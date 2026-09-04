@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { VenueItem } from "@/types";
 import { KEY_VENUES } from "@/data/venues";
 import { useResearchStore } from "@/store/useResearchStore";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import { ExternalLink, Award, Sparkles, Filter, Calendar, Loader2 } from "lucide-react";
 
 export function VenueList() {
@@ -38,11 +39,14 @@ export function VenueList() {
   return (
     <div className="space-y-4 text-xs">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-slate-600 dark:text-slate-400">
-            {locale === "bn"
-              ? `${venues.length} টি শীর্ষ ইনডেক্সড ভেন্যু প্রদর্শিত হচ্ছে`
-              : `Showing ${venues.length} high-impact indexed venues`}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-semibold text-slate-600 dark:text-slate-400 inline-flex items-center">
+            <span>
+              {locale === "bn"
+                ? `${venues.length} টি শীর্ষ ইনডেক্সড ভেন্যু (Scopus Q1-Q4 / CORE)`
+                : `Showing ${venues.length} high-impact indexed venues (Scopus Q1-Q4 / CORE)`}
+            </span>
+            <AcademicTooltip term="scopus" />
           </span>
           <span className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />

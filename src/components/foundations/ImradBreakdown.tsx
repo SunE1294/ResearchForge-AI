@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import { FileText, Cpu, CheckCircle, BarChart3, MessageSquare, AlertCircle } from "lucide-react";
 
 export function ImradBreakdown() {
@@ -124,6 +125,21 @@ export function ImradBreakdown() {
 
   return (
     <div className="space-y-6">
+      {/* IMRAD Concept Banner */}
+      <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900 text-xs flex items-center justify-between">
+        <div>
+          <span className="font-bold text-indigo-700 dark:text-cyan-300 inline-flex items-center">
+            <span>{locale === "bn" ? "IMRAD পেপার অ্যানাটমি ও অধ্যায়ভিত্তিক ফর্মুলা" : "IMRAD Paper Structure & Chapter Anatomy"}</span>
+            <AcademicTooltip term="imrad" />
+          </span>
+          <p className="text-slate-600 dark:text-slate-400 mt-0.5">
+            {locale === "bn"
+              ? "বৈজ্ঞানিক গবেষণাপত্রের ৪টি মৌলিক অধ্যায় কীভাবে সাজাতে হয় এবং কোন ভুলগুলো পরিহার করতে হবে তা বিস্তারিত জানুন।"
+              : "Learn the essential architectural blueprints and common pitfalls across the four core scientific manuscript sections."}
+          </p>
+        </div>
+      </div>
+
       {/* Chapter Tabs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         {sections.map((sec) => {

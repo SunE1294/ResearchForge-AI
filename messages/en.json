@@ -6,6 +6,10 @@
     "institutionBaseline": "Universal Academic Research Co-Pilot for All Tertiary Institutions"
   },
   "nav": {
+    "dashboard": "Dashboard",
+    "explore": "Explore",
+    "methodology": "Methodology & Roadmap",
+    "writing": "Writing & Ethics",
     "workspace": "Workspace",
     "foundations": "Foundations",
     "methodologyLab": "Methodology Lab",

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
 import { useI18n } from "@/lib/i18n";
 import { SurveyQuestionnaireResult } from "@/lib/ai/gemini";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import {
   Sparkles,
   FileText,
@@ -476,11 +477,13 @@ export function SurveyArchitect() {
                 <div className="flex items-center gap-2">
                   <ListOrdered className="w-5 h-5 text-indigo-600 dark:text-cyan-400" />
                   <div>
-                    <span className="text-[10px] font-bold text-indigo-600 dark:text-cyan-400 uppercase tracking-wider block">
-                      Section 3 • Empirical Measurement Matrix (10 Items)
+                    <span className="text-[10px] font-bold text-indigo-600 dark:text-cyan-400 uppercase tracking-wider inline-flex items-center">
+                      <span>Section 3 • Empirical Measurement Matrix (10 Items)</span>
+                      <AcademicTooltip term="cronbach" />
                     </span>
-                    <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                      {locale === "bn" ? "৫-পয়েন্ট লিকার্ট স্কেল প্রশ্নমালা" : "5-Point Likert Scale Survey Items"}
+                    <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white inline-flex items-center">
+                      <span>{locale === "bn" ? "৫-পয়েন্ট লিকার্ট স্কেল প্রশ্নমালা" : "5-Point Likert Scale Survey Items"}</span>
+                      <AcademicTooltip term="likert" />
                     </h4>
                   </div>
                 </div>

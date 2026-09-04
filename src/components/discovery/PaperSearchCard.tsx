@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Paper } from "@/types";
 import { useResearchStore } from "@/store/useResearchStore";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import {
   Bookmark,
   ExternalLink,
@@ -160,14 +161,17 @@ export function PaperSearchCard({ paper }: PaperSearchCardProps) {
             </a>
           )}
           {paper.doi && (
-            <a
-              href={`https://doi.org/${paper.doi}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 text-slate-500 hover:text-indigo-600 dark:hover:text-cyan-400 underline font-mono text-[11px]"
-            >
-              DOI Link
-            </a>
+            <span className="inline-flex items-center">
+              <a
+                href={`https://doi.org/${paper.doi}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-slate-500 hover:text-indigo-600 dark:hover:text-cyan-400 underline font-mono text-[11px]"
+              >
+                DOI Link
+              </a>
+              <AcademicTooltip term="doi" />
+            </span>
           )}
         </div>
 

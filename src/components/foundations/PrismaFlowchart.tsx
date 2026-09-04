@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
+import { AcademicTooltip } from "@/components/ui/AcademicTooltip";
 import { Layers, ArrowDown, Download, CheckCircle2 } from "lucide-react";
 
 export function PrismaFlowchart() {
@@ -23,8 +24,9 @@ export function PrismaFlowchart() {
     <div className="space-y-6">
       <div className="p-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900 text-xs flex items-center justify-between">
         <div>
-          <span className="font-bold text-indigo-700 dark:text-cyan-300 block">
-            {locale === "bn" ? "প্রিজমা ২০২০ (PRISMA 2020) ইন্টারঅ্যাক্টিভ ফ্লোচার্ট জেনারেটর" : "PRISMA 2020 Flowchart Interactive Generator"}
+          <span className="font-bold text-indigo-700 dark:text-cyan-300 inline-flex items-center">
+            <span>{locale === "bn" ? "প্রিজমা ২০২০ (PRISMA 2020) ইন্টারঅ্যাক্টিভ ফ্লোচার্ট জেনারেটর" : "PRISMA 2020 Flowchart Interactive Generator"}</span>
+            <AcademicTooltip term="prisma" />
           </span>
           <span className="text-slate-600 dark:text-slate-400">
             {locale === "bn"
