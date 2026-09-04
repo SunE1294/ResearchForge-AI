@@ -790,9 +790,23 @@ Return ONLY a valid JSON array matching this exact schema without markdown forma
     }
   }
 
-  // If candidate count is low because of strict filters, include interdisciplinary venues
+  // Prioritize department-specific venues
+  if (departmentCode) {
+    const deptSpecific = candidates.filter((v) => v.departments && v.departments.includes(departmentCode));
+    if (deptSpecific.length > 0) {
+      const others = candidates.filter((v) => !v.departments || !v.departments.includes(departmentCode));
+      candidates = [...deptSpecific, ...others];
+    }
+  }
+
+  // If candidate count is low, supplement ONLY with interdisciplinary venues (never contaminate from other faculties)
   if (candidates.length < 3) {
-    candidates = ALL_FACULTY_VENUES;
+    const interdisciplinary = ALL_FACULTY_VENUES.filter((v) => (v.facultyCode as string) === "INTERDISCIPLINARY");
+    for (const iv of interdisciplinary) {
+      if (!candidates.some((c) => c.id === iv.id)) {
+        candidates.push(iv);
+      }
+    }
   }
 
   // If topic provided, rank candidates based on keyword overlap

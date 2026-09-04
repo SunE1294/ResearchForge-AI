@@ -1,10 +1,11 @@
 import { DatasetItem } from "@/types";
 
 export const BENCHMARK_DATASETS: DatasetItem[] = [
+  // --- FSIT (Computing, Software & Systems) ---
   {
     id: "huggingface-bengali-nlp",
     title: "BanglaNLP & Bengali Speech Corpora",
-    description: "Multi-domain annotated Bengali text, sentiment, NER, and ASR speech benchmarks.",
+    description: "Multi-domain annotated Bengali text, sentiment, NER, and ASR speech benchmarks for low-resource NLP.",
     descriptionBn: "বাংলা টেক্সট ক্লাসিফিকেশন, সেন্টিমেন্ট অ্যানালিসিস, এনইআর এবং ভয়েস স্পিচ বেঞ্চমার্ক ডেটাসেট।",
     departments: ["CSE", "SWE", "CIS", "MCT"],
     facultyCode: "FSIT",
@@ -28,6 +29,19 @@ export const BENCHMARK_DATASETS: DatasetItem[] = [
     tags: ["Classification", "Regression", "Clustering", "Data Science"]
   },
   {
+    id: "github-archive-msr",
+    title: "GitHub Archive Software Repository Metrics",
+    description: "Millions of public git commits, code smell indicators, pull requests, and software defect logs.",
+    descriptionBn: "সফটওয়্যার আর্কিটেকচার, কোড ডিফেক্ট প্রেডিকশন এবং ওপেন সোর্স রেপোজিটরি মাইনিং ডেটাসেট।",
+    departments: ["SWE", "CSE"],
+    facultyCode: "FSIT",
+    sourceName: "GH Archive / Google BigQuery",
+    sourceUrl: "https://www.gharchive.org/",
+    format: ["JSON", "SQL BigQuery"],
+    license: "Open Data Commons",
+    tags: ["Software Engineering", "Mining Repositories", "Code Smells", "DevOps"]
+  },
+  {
     id: "copernicus-sentinel",
     title: "Copernicus Open Access Hub & Sentinel Imagery",
     description: "Multispectral optical and SAR radar satellite data for flood mapping, NDVI, and land cover.",
@@ -40,6 +54,88 @@ export const BENCHMARK_DATASETS: DatasetItem[] = [
     license: "Free Open Access",
     tags: ["GIS", "Remote Sensing", "Environmental", "Satellite"]
   },
+
+  // --- FHSS (Humanities, Law & Social Sciences) ---
+  {
+    id: "coca-corpus-linguistics",
+    title: "Corpus of Contemporary American English (COCA)",
+    description: "One billion word balanced corpus across spoken, fiction, academic texts, magazines, and newspapers.",
+    descriptionBn: "ভাষাতাত্ত্বিক গবেষণা, শব্দ ব্যবহারের ফ্রিকোয়েন্সি এবং ডিসকোর্স বিশ্লেষণের এক বিলিয়ন শব্দের করপাস।",
+    departments: ["ENG", "JMC"],
+    facultyCode: "FHSS",
+    sourceName: "English-Corpora.org",
+    sourceUrl: "https://www.english-corpora.org/coca/",
+    format: ["Web Interface", "Text Concordance"],
+    license: "Academic Research License",
+    tags: ["Linguistics", "Corpus", "English", "Collocations"]
+  },
+  {
+    id: "bnc-british-corpus",
+    title: "British National Corpus (BNC)",
+    description: "100-million word collection of samples of written and spoken language from a wide range of sources.",
+    descriptionBn: "ব্রিটিশ ন্যাশনাল করপাস - ১০০ মিলিয়ন শব্দের সমসাময়িক ইংরেজি টেক্সট ও কথ্য ভাষার ডাটাবেজ।",
+    departments: ["ENG"],
+    facultyCode: "FHSS",
+    sourceName: "University of Oxford",
+    sourceUrl: "https://www.natcorp.ox.ac.uk/",
+    format: ["XML", "Concordance"],
+    license: "BNC Academic License",
+    tags: ["Corpus Linguistics", "Lexicography", "Discourse", "English"]
+  },
+  {
+    id: "project-gutenberg-literary",
+    title: "Project Gutenberg Literary Corpora",
+    description: "Over 70,000 public domain full-text literary works spanning classical, Victorian, and modern postcolonial literature.",
+    descriptionBn: "৭০,০০০+ ধ্রুপদী সাহিত্য, নাটক ও ঐতিহাসিক টেক্সটের উন্মুক্ত গবেষণাধর্মী টেক্সচুয়াল ডাটাবেজ।",
+    departments: ["ENG"],
+    facultyCode: "FHSS",
+    sourceName: "Project Gutenberg",
+    sourceUrl: "https://www.gutenberg.org/",
+    format: ["Plain Text UTF-8", "EPUB", "HTML"],
+    license: "Public Domain",
+    tags: ["Literary Analysis", "Hermeneutics", "Textual Corpora", "Literature"]
+  },
+  {
+    id: "bangladesh-laws-statutes",
+    title: "Laws of Bangladesh & Supreme Court Law Reports",
+    description: "Comprehensive statutory repository containing all codified Acts, Ordinances, and landmark Appellate Division judgments.",
+    descriptionBn: "বাংলাদেশ সরকারের সকল প্রচলিত আইন, অধ্যাদেশ এবং সুপ্রিম কোর্টের গুরুত্বপূর্ণ নজিরবাহী রায়।",
+    departments: ["LAW"],
+    facultyCode: "FHSS",
+    sourceName: "Ministry of Law / Supreme Court of BD",
+    sourceUrl: "http://bdlaws.minlaw.gov.bd/",
+    format: ["HTML", "PDF"],
+    license: "Official Public Domain",
+    tags: ["Jurisprudence", "Statutes", "OSCOLA", "Case Law"]
+  },
+  {
+    id: "caselaw-access-project",
+    title: "Harvard Caselaw Access Project (CAP)",
+    description: "Digitized collection of 6.7 million official court decisions covering 360 years of common law jurisprudence.",
+    descriptionBn: "হার্ভার্ড ল স্কুলের ৩৬০ বছরের ৬.৭ মিলিয়ন সাধারণ আইনের আদালতের রায়ের ডিজিটালাইজড ডাটাবেজ।",
+    departments: ["LAW"],
+    facultyCode: "FHSS",
+    sourceName: "Harvard Law School",
+    sourceUrl: "https://case.law/",
+    format: ["JSON API", "PDF"],
+    license: "Creative Commons / Open Legal Data",
+    tags: ["Common Law", "Doctrinal Legal Research", "Appellate Case Law", "OSCOLA"]
+  },
+  {
+    id: "un-treaty-collection",
+    title: "United Nations Treaty Collection (UNTC) & ICJ Reports",
+    description: "Official multilateral treaties, international conventions, and International Court of Justice jurisprudence.",
+    descriptionBn: "জাতিসংঘের আন্তর্জাতিক চুক্তি, কনভেনশন এবং আন্তর্জাতিক আদালতের (ICJ) রায়সমূহের আর্কাইভ।",
+    departments: ["LAW", "DS"],
+    facultyCode: "FHSS",
+    sourceName: "United Nations Legal Affairs",
+    sourceUrl: "https://treaties.un.org/",
+    format: ["PDF", "HTML"],
+    license: "Official UN Open Access",
+    tags: ["International Law", "Human Rights", "Treaties", "ICJ"]
+  },
+
+  // --- FBE (Business & Entrepreneurship) ---
   {
     id: "world-bank-wdi",
     title: "World Bank World Development Indicators (WDI)",
@@ -66,6 +162,21 @@ export const BENCHMARK_DATASETS: DatasetItem[] = [
     license: "Research Fair Use",
     tags: ["Finance", "Econometrics", "Capital Markets", "Stock Prediction"]
   },
+  {
+    id: "fred-economic-data",
+    title: "Federal Reserve Economic Data (FRED)",
+    description: "Over 800,000 international macroeconomic, interest rate, exchange rate, and inflation time-series.",
+    descriptionBn: "আন্তর্জাতিক মুদ্রাস্ফীতি, সুদের হার, বিনিময় হার এবং জিডিপি প্রবৃদ্ধির টাইম-সিরিজ ডাটাবেজ।",
+    departments: ["BBA", "DS"],
+    facultyCode: "FBE",
+    sourceName: "Federal Reserve Bank of St. Louis",
+    sourceUrl: "https://fred.stlouisfed.org/",
+    format: ["CSV", "Excel", "R/Python API"],
+    license: "Public Domain",
+    tags: ["Macroeconomics", "Econometrics", "Inflation", "Time-Series"]
+  },
+
+  // --- FHLS (Health, Pharmacy & Life Sciences) ---
   {
     id: "pubchem-bindingdb",
     title: "PubChem BioAssay & BindingDB",
@@ -105,32 +216,8 @@ export const BENCHMARK_DATASETS: DatasetItem[] = [
     license: "Open Access",
     tags: ["Agriculture", "Food Security", "Crop Yields", "Soil Science"]
   },
-  {
-    id: "bangladesh-laws-statutes",
-    title: "Laws of Bangladesh & Supreme Court Law Reports",
-    description: "Comprehensive statutory repository containing all codified Acts, Ordinances, and landmark Appellate Division judgments.",
-    descriptionBn: "বাংলাদেশ সরকারের সকল প্রচলিত আইন, অধ্যাদেশ এবং সুপ্রিম কোর্টের গুরুত্বপূর্ণ নজিরবাহী রায়।",
-    departments: ["LAW"],
-    facultyCode: "FHSS",
-    sourceName: "Ministry of Law / Supreme Court of BD",
-    sourceUrl: "http://bdlaws.minlaw.gov.bd/",
-    format: ["HTML", "PDF"],
-    license: "Official Public Domain",
-    tags: ["Jurisprudence", "Statutes", "OSCOLA", "Case Law"]
-  },
-  {
-    id: "coca-corpus-linguistics",
-    title: "Corpus of Contemporary American English (COCA)",
-    description: "One billion word balanced corpus across spoken, fiction, magazines, newspapers, and academic journals.",
-    descriptionBn: "ভাষাতাত্ত্বিক গবেষণা, শব্দ ব্যবহারের ফ্রিকোয়েন্সি এবং ডিসকোর্স বিশ্লেষণের এক বিলিয়ন শব্দের করপাস।",
-    departments: ["ENG", "JMC"],
-    facultyCode: "FHSS",
-    sourceName: "English-Corpora.org",
-    sourceUrl: "https://www.english-corpora.org/coca/",
-    format: ["Web Interface", "Text Concordance"],
-    license: "Academic Research License",
-    tags: ["Linguistics", "Corpus", "English", "Collocations"]
-  },
+
+  // --- FE (Engineering & Architecture) ---
   {
     id: "materials-project",
     title: "Materials Project Open Database",
@@ -143,5 +230,18 @@ export const BENCHMARK_DATASETS: DatasetItem[] = [
     format: ["CIF", "JSON", "REST API"],
     license: "CC-BY-4.0",
     tags: ["Materials Science", "Nanotechnology", "DFT", "Crystallography"]
+  },
+  {
+    id: "nasa-turbofan-prognostics",
+    title: "NASA Turbofan Engine Degradation Simulation",
+    description: "Run-to-failure sensor degradation time-series under different operational regimes and fault modes.",
+    descriptionBn: "নাসা টার্বোফ্যান ইঞ্জিন সেন্সর ডেটাসেট - প্রেডিক্টিভ মেইনটেন্যান্স ও ফল্ট ডায়াগনসিস গবেষণা।",
+    departments: ["EEE", "CE", "CSE"],
+    facultyCode: "FE",
+    sourceName: "NASA Ames Prognostics Center of Excellence",
+    sourceUrl: "https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/",
+    format: ["TXT", "CSV"],
+    license: "Public NASA Open Data",
+    tags: ["Sensors", "Predictive Maintenance", "Engineering", "Time-Series"]
   }
 ];

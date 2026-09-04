@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useResearchStore } from "@/store/useResearchStore";
 import { useI18n } from "@/lib/i18n";
 import { MatchedVenueResult } from "@/types";
@@ -30,16 +30,44 @@ export function SmartVenueMatcher() {
   const { userProfile, locale } = useResearchStore();
   const { t } = useI18n(locale);
 
+  const initialFaculty = userProfile.facultyCode && userProfile.facultyCode !== "OTHER"
+    ? userProfile.facultyCode
+    : "ALL";
+
   // Search Controls State (CRITICAL: Empty string by default, unpopulated)
   const [topicInput, setTopicInput] = useState<string>("");
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("ALL");
+  const [selectedFaculty, setSelectedFaculty] = useState<string>(initialFaculty);
   const [venueTypeFilter, setVenueTypeFilter] = useState<"all" | "conference" | "journal" | "open_access">("all");
 
-  // Results State (Initialized with verified multidisciplinary seeds)
-  const [venues, setVenues] = useState<MatchedVenueResult[]>(ALL_FACULTY_VENUES.slice(0, 6));
+  // Results State: Initialize strictly with department-aware verified venues
+  const getInitialVenues = (): MatchedVenueResult[] => {
+    if (userProfile.departmentCode) {
+      const deptMatches = ALL_FACULTY_VENUES.filter(
+        (v) => v.departments && v.departments.includes(userProfile.departmentCode)
+      );
+      if (deptMatches.length > 0) return deptMatches;
+    }
+    if (userProfile.facultyCode && userProfile.facultyCode !== "OTHER") {
+      const facMatches = ALL_FACULTY_VENUES.filter(
+        (v) => v.facultyCode === userProfile.facultyCode || (v.facultyCode as string) === "INTERDISCIPLINARY"
+      );
+      if (facMatches.length > 0) return facMatches;
+    }
+    return ALL_FACULTY_VENUES.slice(0, 6);
+  };
+
+  const [venues, setVenues] = useState<MatchedVenueResult[]>(getInitialVenues);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [dataSource, setDataSource] = useState<string>("Verified Multi-Disciplinary Index");
+  const [dataSource, setDataSource] = useState<string>("Verified Discipline Index");
+
+  // Keep faculty synchronized if user updates profile
+  useEffect(() => {
+    if (userProfile.facultyCode && userProfile.facultyCode !== "OTHER") {
+      setSelectedFaculty(userProfile.facultyCode);
+    }
+    setVenues(getInitialVenues());
+  }, [userProfile.departmentCode, userProfile.facultyCode]);
 
   // Faculty Filter Options
   const facultyOptions = [
@@ -83,10 +111,17 @@ export function SmartVenueMatcher() {
       }
     } catch (err) {
       console.warn("API match failure, filtering local all-faculty venues:", err);
-      // Resilient fallback filtering
+      // Resilient fallback filtering with department isolation
       let fallback = [...ALL_FACULTY_VENUES];
       if (selectedFaculty !== "ALL") {
-        fallback = fallback.filter((v) => v.facultyCode === selectedFaculty || v.facultyCode === ("INTERDISCIPLINARY" as any));
+        fallback = fallback.filter((v) => v.facultyCode === selectedFaculty || (v.facultyCode as string) === "INTERDISCIPLINARY");
+      }
+      if (userProfile.departmentCode) {
+        const deptMatches = fallback.filter((v) => v.departments && v.departments.includes(userProfile.departmentCode));
+        if (deptMatches.length > 0) {
+          const others = fallback.filter((v) => !v.departments || !v.departments.includes(userProfile.departmentCode));
+          fallback = [...deptMatches, ...others];
+        }
       }
       if (venueTypeFilter === "conference") {
         fallback = fallback.filter((v) => v.type === "Conference");
@@ -96,7 +131,7 @@ export function SmartVenueMatcher() {
         fallback = fallback.filter((v) => v.isOpenAccess);
       }
       setVenues(fallback.slice(0, 6));
-      setDataSource("Local Multi-Disciplinary Seed Bank");
+      setDataSource("Local Discipline Seed Index");
     } finally {
       setIsLoading(false);
     }

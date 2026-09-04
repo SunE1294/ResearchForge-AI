@@ -149,6 +149,7 @@ export interface MatchedVenueResult {
   indexing: string[];
   field: string;
   facultyCode: FacultyCode;
+  departments?: string[];
   scopeAlignment: string;
   scopeAlignmentBn?: string;
   cfpCycle: string;

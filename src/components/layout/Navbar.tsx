@@ -73,8 +73,8 @@ export function Navbar() {
   const exploreItems = [
     {
       href: "/discovery",
-      label: locale === "bn" ? "গবেষণাপত্র অনুসন্ধান (Literature Discovery)" : "Literature & Paper Discovery",
-      desc: locale === "bn" ? "OpenAlex ও Crossref থেকে ১৫০+ মিলিয়ন পেপার খুঁজুন" : "Search 150M+ verified peer-reviewed papers",
+      label: locale === "bn" ? "গবেষণাপত্র ও ডেটাসেট অনুসন্ধান" : "Literature & Dataset Discovery",
+      desc: locale === "bn" ? "OpenAlex, Crossref ও Zenodo থেকে পেপার ও বেঞ্চমার্ক ডেটাসেট" : "Search 150M+ verified papers & benchmark datasets",
       icon: Compass,
       color: "text-indigo-600 dark:text-cyan-400"
     },
@@ -84,20 +84,6 @@ export function Navbar() {
       desc: locale === "bn" ? "থ্রি-পাস পাঠপদ্ধতি, IMRAD অ্যানাটমি ও PRISMA ফ্রেমওয়ার্ক" : "Three-Pass method, IMRAD anatomy & PRISMA",
       icon: BookOpen,
       color: "text-blue-600 dark:text-blue-400"
-    },
-    {
-      href: "/discovery?tab=datasets",
-      label: locale === "bn" ? "উন্মুক্ত ডেটাসেট পোর্টাল" : "Benchmark & Open Datasets",
-      desc: locale === "bn" ? "Zenodo, Hugging Face, UCI ও Kaggle বেঞ্চমার্ক" : "Access Zenodo, Hugging Face, UCI & Kaggle data",
-      icon: Database,
-      color: "text-emerald-600 dark:text-emerald-400"
-    },
-    {
-      href: "/venues#resources",
-      label: locale === "bn" ? "টুলস ও রিসোর্স ইকোসিস্টেম" : "Academic Resource Hub",
-      desc: locale === "bn" ? "Google Scholar, arXiv, ResearchGate ও PMC হাব" : "Google Scholar, arXiv, ResearchGate & PMC portals",
-      icon: Globe,
-      color: "text-cyan-600 dark:text-cyan-300"
     }
   ];
 
@@ -122,18 +108,18 @@ export function Navbar() {
   // Section 3: Writing & Ethics
   const writingItems = [
     {
+      href: "/venues",
+      label: locale === "bn" ? "ভেন্যু, অ্যান্টি-স্ক্যাম ও রিসোর্স হাব" : "Venues, Anti-Scam & Resource Hub",
+      desc: locale === "bn" ? "স্মার্ট ভেন্যু ফাইন্ডার, প্রিডেটরি শিল্ড ও টুলিং ইকোসিস্টেম" : "Smart Venue & CFP Matcher, Predatory Shield & Tooling Ecosystem",
+      icon: Sparkles,
+      color: "text-rose-600 dark:text-rose-400"
+    },
+    {
       href: "/ethical-ai",
       label: locale === "bn" ? "নৈতিক এআই ও টার্নিটিন গাইড" : "Ethical AI & Disclosure Navigator",
       desc: locale === "bn" ? "টার্নিটিন প্লেজিয়ারিজম অডিট ও অফিসিয়াল এআই ডিক্লারেশন" : "Turnitin similarity auditor & formal AI disclosure statement generator",
       icon: ShieldCheck,
       color: "text-amber-600 dark:text-amber-400"
-    },
-    {
-      href: "/venues",
-      label: locale === "bn" ? "জার্নাল ভেন্যু ও অ্যান্টি-স্ক্যাম শিল্ড" : "Venues & Predatory Journal Shield",
-      desc: locale === "bn" ? "স্কোপাস Q1-Q4 কোয়ার্টাইল ও ৫-দফা স্ক্যাম চেকলিস্ট" : "Scopus Q1-Q4 quartile audit & predatory journal anti-scam inspector",
-      icon: Sparkles,
-      color: "text-rose-600 dark:text-rose-400"
     },
     {
       href: "/compute",

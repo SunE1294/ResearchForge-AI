@@ -25,6 +25,19 @@ import {
   Check
 } from "lucide-react";
 
+// Check if string is a default placeholder or empty
+const isDefaultPlaceholder = (val?: string) => {
+  if (!val) return true;
+  const v = val.trim();
+  return (
+    v === "" ||
+    v === "Student Scholar" ||
+    v === "গবেষক শিক্ষার্থী" ||
+    v === "Tertiary Institution" ||
+    v === "শিক্ষা প্রতিষ্ঠান"
+  );
+};
+
 // Check if topic is non-generic and non-empty
 const isGenericOrEmptyTopic = (t?: string) => {
   if (!t) return true;
@@ -53,9 +66,9 @@ export function OnboardingModal() {
   // Active Wizard Step (1: Identity, 2: Department, 3: Goals)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  // Local form state initialized from store
-  const [name, setName] = useState(userProfile.name || "");
-  const [institution, setInstitution] = useState(userProfile.institution || "");
+  // Local form state initialized from store (strictly empty if default placeholder)
+  const [name, setName] = useState(isDefaultPlaceholder(userProfile.name) ? "" : (userProfile.name || ""));
+  const [institution, setInstitution] = useState(isDefaultPlaceholder(userProfile.institution) ? "" : (userProfile.institution || ""));
   const [academicLevel, setAcademicLevel] = useState<AcademicLevel>(userProfile.academicLevel || "undergraduate");
   const [facultyCode, setFacultyCode] = useState<FacultyCode>(userProfile.facultyCode || "FSIT");
   const [departmentCode, setDepartmentCode] = useState<DepartmentCode>(userProfile.departmentCode || "CSE");
@@ -74,8 +87,8 @@ export function OnboardingModal() {
 
   // Synchronize when store changes
   useEffect(() => {
-    setName(userProfile.name || "");
-    setInstitution(userProfile.institution || "");
+    setName(isDefaultPlaceholder(userProfile.name) ? "" : (userProfile.name || ""));
+    setInstitution(isDefaultPlaceholder(userProfile.institution) ? "" : (userProfile.institution || ""));
     setAcademicLevel(userProfile.academicLevel || "undergraduate");
     setFacultyCode(userProfile.facultyCode || "FSIT");
     setDepartmentCode(userProfile.departmentCode || "CSE");
@@ -108,8 +121,8 @@ export function OnboardingModal() {
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
 
-    const finalName = name.trim() || (locale === "bn" ? "গবেষক শিক্ষার্থী" : "Student Scholar");
-    const finalInstitution = institution.trim() || (locale === "bn" ? "শিক্ষা প্রতিষ্ঠান" : "Tertiary Institution");
+    const finalName = name.trim();
+    const finalInstitution = institution.trim();
     const finalInterest = hasSpecificTopic ? primaryInterest.trim() : "";
 
     const updatedProfile = {
@@ -136,8 +149,8 @@ export function OnboardingModal() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userId: "00000000-0000-0000-0000-000000000001",
-          fullName: finalName,
-          institution: finalInstitution,
+          fullName: finalName || (locale === "bn" ? "গবেষক শিক্ষার্থী" : "Student Scholar"),
+          institution: finalInstitution || (locale === "bn" ? "শিক্ষা প্রতিষ্ঠান" : "Tertiary Institution"),
           facultyCode,
           departmentCode: departmentCode === "OTHER" ? (customDepartmentName.trim() || "OTHER") : departmentCode,
           primaryInterest: finalInterest,
@@ -264,7 +277,7 @@ export function OnboardingModal() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder={t("onboarding.namePlaceholder")}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400 transition"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400 transition"
                     />
                   </div>
 
@@ -277,7 +290,7 @@ export function OnboardingModal() {
                       value={institution}
                       onChange={(e) => setInstitution(e.target.value)}
                       placeholder={t("onboarding.institutionPlaceholder")}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400 transition"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-cyan-400 transition"
                     />
                   </div>
                 </div>

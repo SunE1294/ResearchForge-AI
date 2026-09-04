@@ -39,12 +39,25 @@ export default function DiscoveryPage() {
   const [searchQuery, setSearchQuery] = useState(initialTopic);
   const [papers, setPapers] = useState<Paper[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"papers" | "datasets" | "bookmarks" | "hub">("papers");
+  const [activeTab, setActiveTab] = useState<"papers" | "datasets" | "bookmarks">("papers");
   const [isQueryModalOpen, setIsQueryModalOpen] = useState(false);
   const [openAccessOnly, setOpenAccessOnly] = useState(false);
 
+  // Sync tab from URL query params (e.g. ?tab=datasets)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab")?.toLowerCase();
+      if (tabParam === "datasets") {
+        setActiveTab("datasets");
+      } else if (tabParam === "bookmarks") {
+        setActiveTab("bookmarks");
+      }
+    }
+  }, []);
+
   const performSearch = async (queryText: string) => {
-    if (!queryText.trim()) return;
+    if (!queryText.trim() && !userProfile.departmentCode) return;
     setIsLoading(true);
 
     try {
@@ -65,7 +78,7 @@ export default function DiscoveryPage() {
   // Initial load with student's actual topic or department
   useEffect(() => {
     performSearch(searchQuery);
-  }, []);
+  }, [userProfile.departmentCode]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,7 +96,7 @@ export default function DiscoveryPage() {
   });
 
   return (
-    <div className="space-y-8 text-xs">
+    <div className="space-y-6 text-xs">
       {/* Header */}
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-cyan-300 border border-indigo-200 dark:border-indigo-900">
@@ -91,12 +104,34 @@ export default function DiscoveryPage() {
           <span>{locale === "bn" ? "পর্যায় গ • অ্যাকাডেমিক ডিসকভারি পাইপলাইন" : "Phase C • Academic Discovery Pipeline"}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          {t("discovery.title")}
+          {locale === "bn" ? "গবেষণাপত্র ও ডেটাসেট অনুসন্ধান" : "Literature & Dataset Discovery Hub"}
         </h1>
         <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-3xl">
-          {t("discovery.subtitle")}
+          {locale === "bn"
+            ? "আপনার অ্যাকাডেমিক বিভাগ অনুযায়ী OpenAlex, Crossref ও CERN Zenodo থেকে আন্তর্জাতিক গবেষণাপত্র এবং বেঞ্চমার্ক ডেটাসেট অনুসন্ধান করুন।"
+            : "Search peer-reviewed publications and verified benchmark datasets filtered specifically for your institutional department."}
         </p>
       </div>
+
+      {/* Active Department Context Indicator */}
+      {deptInfo && (
+        <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 text-xs">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold text-indigo-950 dark:text-cyan-300">
+              {locale === "bn" ? "সক্রিয় বিভাগ:" : "Active Discipline:"}
+            </span>
+            <span className="font-semibold text-slate-800 dark:text-slate-200">
+              {locale === "bn" ? deptInfo.nameBn : deptInfo.name} ({deptInfo.code})
+            </span>
+            <span className="px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 text-indigo-600 dark:text-cyan-400 font-mono text-[10px] font-bold border border-indigo-200/60 dark:border-slate-700">
+              {deptInfo.recommendedCitation}
+            </span>
+          </div>
+          <span className="text-slate-500 dark:text-slate-400 text-[11px] hidden sm:inline">
+            {locale === "bn" ? "বিভাগ-নির্দিষ্ট লিটারেচার অগ্রাধিকার দেওয়া হচ্ছে" : "Strict domain filtering active"}
+          </span>
+        </div>
+      )}
 
       {/* Search Bar & AI Query Builder Trigger */}
       <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
@@ -131,51 +166,41 @@ export default function DiscoveryPage() {
           </button>
         </form>
 
-        {/* Quick Filter Bar */}
+        {/* Dynamic Sub-Tabs: [গবেষণাপত্র (Indexed Papers)] | [ডেটাসেট (Benchmark Datasets)] */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => setActiveTab("papers")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition ${
+              className={`px-3.5 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
                 activeTab === "papers"
-                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950"
+                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950 shadow-sm"
                   : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
               }`}
             >
-              {locale === "bn" ? `ইনডেক্সড পেপারসমূহ (${papers.length})` : `Indexed Papers (${papers.length})`}
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>{locale === "bn" ? `গবেষণাপত্র (Indexed Papers - ${papers.length})` : `Indexed Papers (${papers.length})`}</span>
             </button>
             <button
               onClick={() => setActiveTab("datasets")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
                 activeTab === "datasets"
-                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950"
+                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950 shadow-sm"
                   : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
               }`}
             >
               <Database className="w-3.5 h-3.5" />
-              <span>{locale === "bn" ? "বেঞ্চমার্ক ডেটাসেট" : "Curated Datasets"}</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("hub")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
-                activeTab === "hub"
-                  ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm"
-                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
-              }`}
-            >
-              <Globe className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{t("discovery.tabHub")}</span>
+              <span>{locale === "bn" ? "ডেটাসেট (Benchmark Datasets)" : "Benchmark Datasets"}</span>
             </button>
             <button
               onClick={() => setActiveTab("bookmarks")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5 ${
                 activeTab === "bookmarks"
-                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950"
+                  ? "bg-indigo-600 text-white dark:bg-cyan-500 dark:text-slate-950 shadow-sm"
                   : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
               }`}
             >
               <Bookmark className="w-3.5 h-3.5" />
-              <span>{locale === "bn" ? `সংরক্ষিত (${savedPaperIds.length})` : `Bookmarked (${savedPaperIds.length})`}</span>
+              <span>{locale === "bn" ? `সংরক্ষিত পেপারসমূহ (${savedPaperIds.length})` : `Saved Papers (${savedPaperIds.length})`}</span>
             </button>
           </div>
 
@@ -194,9 +219,7 @@ export default function DiscoveryPage() {
       </div>
 
       {/* Main Content Area */}
-      {activeTab === "hub" ? (
-        <AcademicResourceHub />
-      ) : activeTab === "datasets" ? (
+      {activeTab === "datasets" ? (
         <DatasetFinder initialSearchQuery={searchQuery} />
       ) : (
         <div className="space-y-4">

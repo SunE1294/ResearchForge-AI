@@ -12,11 +12,32 @@ interface DatasetFinderProps {
 
 export function DatasetFinder({ initialSearchQuery = "" }: DatasetFinderProps) {
   const { userProfile, locale } = useResearchStore();
-  const [selectedFaculty, setSelectedFaculty] = useState<string>("ALL");
+  const initialFaculty = userProfile.facultyCode && userProfile.facultyCode !== "OTHER"
+    ? userProfile.facultyCode
+    : "ALL";
+  const [selectedFaculty, setSelectedFaculty] = useState<string>(initialFaculty);
   const [searchTerm, setSearchTerm] = useState<string>(initialSearchQuery);
-  const [datasets, setDatasets] = useState<DatasetItem[]>(BENCHMARK_DATASETS);
+
+  // Initialize strictly with department-isolated benchmark datasets
+  const getInitialDatasets = () => {
+    if (userProfile.departmentCode) {
+      const matched = BENCHMARK_DATASETS.filter(
+        (d) => d.departments && d.departments.includes(userProfile.departmentCode)
+      );
+      if (matched.length > 0) return matched;
+    }
+    if (userProfile.facultyCode && userProfile.facultyCode !== "OTHER") {
+      const facMatched = BENCHMARK_DATASETS.filter(
+        (d) => d.facultyCode === userProfile.facultyCode
+      );
+      if (facMatched.length > 0) return facMatched;
+    }
+    return BENCHMARK_DATASETS;
+  };
+
+  const [datasets, setDatasets] = useState<DatasetItem[]>(getInitialDatasets);
   const [isLoading, setIsLoading] = useState(false);
-  const [dataSource, setDataSource] = useState<string>("CERN Zenodo & Hugging Face Live");
+  const [dataSource, setDataSource] = useState<string>("CERN Zenodo & Verified Catalog");
 
   // Keep search term synchronized if parent query changes
   useEffect(() => {
@@ -32,6 +53,7 @@ export function DatasetFinder({ initialSearchQuery = "" }: DatasetFinderProps) {
       const params = new URLSearchParams();
       if (queryText.trim()) params.set("q", queryText.trim());
       if (faculty !== "ALL") params.set("faculty", faculty);
+      if (userProfile.departmentCode) params.set("dept", userProfile.departmentCode);
 
       const res = await fetch(`/api/datasets?${params.toString()}`);
       const data = await res.json();
@@ -48,7 +70,7 @@ export function DatasetFinder({ initialSearchQuery = "" }: DatasetFinderProps) {
 
   useEffect(() => {
     fetchDatasets(searchTerm, selectedFaculty);
-  }, [selectedFaculty]);
+  }, [selectedFaculty, userProfile.departmentCode]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

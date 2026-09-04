@@ -44,12 +44,30 @@ export async function GET(request: NextRequest) {
     }
 
     // Default load: query Supabase PostgreSQL by faculty/dept
-    const datasets = await dbGetDatasets(faculty, dept);
+    let datasets = await dbGetDatasets(faculty, dept);
+
+    if (!datasets || datasets.length === 0) {
+      // Local fallback with strict department/faculty isolation
+      if (dept) {
+        const deptMatches = BENCHMARK_DATASETS.filter((d) => d.departments && d.departments.includes(dept as any));
+        if (deptMatches.length > 0) {
+          datasets = deptMatches;
+        } else if (faculty && faculty !== "ALL") {
+          datasets = BENCHMARK_DATASETS.filter((d) => d.facultyCode === faculty);
+        } else {
+          datasets = BENCHMARK_DATASETS;
+        }
+      } else if (faculty && faculty !== "ALL") {
+        datasets = BENCHMARK_DATASETS.filter((d) => d.facultyCode === faculty);
+      } else {
+        datasets = BENCHMARK_DATASETS;
+      }
+    }
 
     return NextResponse.json({
       datasets: datasets.length > 0 ? datasets : BENCHMARK_DATASETS,
       total: datasets.length > 0 ? datasets.length : BENCHMARK_DATASETS.length,
-      source: "Supabase PostgreSQL",
+      source: "Supabase PostgreSQL & Verified Catalog",
     });
   } catch (error) {
     console.warn("Dataset API notice:", error);
