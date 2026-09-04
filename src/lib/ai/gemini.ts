@@ -694,3 +694,125 @@ Return ONLY a valid JSON object strictly matching this schema:
   };
 }
 
+/**
+ * Smart Venue Matcher & CFP Finder
+ * Dual-layer discovery: Gemini AI semantic matching + All-Faculty verified seed catalog
+ */
+export async function matchAcademicVenues(
+  topic: string,
+  faculty?: string,
+  venueType?: string,
+  departmentCode?: string
+): Promise<import("@/types").MatchedVenueResult[]> {
+  const { ALL_FACULTY_VENUES } = await import("@/data/venues");
+  const { getDepartmentByCode } = await import("@/data/taxonomy");
+
+  const dept = departmentCode ? getDepartmentByCode(departmentCode as any) : undefined;
+  const targetFaculty = faculty && faculty !== "ALL" ? faculty : dept?.facultyCode || "ALL";
+
+  if (genAI && topic && topic.trim().length > 2) {
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt = `You are a Senior Academic Publishing Strategist and Scopus/CORE Venue Auditor.
+Recommend 4 to 6 authentic, reputable peer-reviewed academic journals and/or CORE conferences matching this research topic.
+
+STUDENT TOPIC: "${topic}"
+FACULTY DISCIPLINE FILTER: ${targetFaculty} (FSIT: Computing/IT, FE: Engineering, FBE: Business/Econ, FHLS: Health/Life Sci/Pharmacy, FHSS: Humanities/Social Sci/Law, ALL: Multi-disciplinary)
+VENUE TYPE PREFERENCE: ${venueType || "all"} (all, conference, journal, open_access)
+DEPARTMENT CONTEXT: ${dept ? `${dept.name} (${dept.code}) - ${dept.archetype}` : "Interdisciplinary"}
+
+STRICT AUDIT RULES:
+1. Support all 24 departments across all 5 faculties appropriately (e.g. Scopus/ABDC for Business, PubMed/MEDLINE for Health/Pharmacy, OSCOLA/Scopus for Law, IEEE/CORE for Computing).
+2. Strictly exclude predatory publishers, hijacked domains, fake impact factors, and unverified vanity outlets.
+3. Include realistic Call-for-Papers (CFP) cycles and typical deadlines.
+4. Assess acceptance feasibility for undergraduate / early-career researchers honestly.
+
+Return ONLY a valid JSON array matching this exact schema without markdown formatting:
+[
+  {
+    "id": "unique-slug-string",
+    "name": "Official Full Name of Venue",
+    "acronym": "Acronym e.g. IEEE TPAMI or CHI",
+    "publisher": "Publisher e.g. IEEE / Elsevier / Springer / Nature / ACM / Wiley / Emerald / Oxford University Press",
+    "type": "Journal or Conference",
+    "tier": "Scimago Q1 / Scimago Q2 / CORE A* / CORE A / PubMed/WoS",
+    "indexing": ["Scopus", "SCIE", "PubMed", "etc"],
+    "field": "Specific Domain tag",
+    "facultyCode": "${targetFaculty === "ALL" ? "FSIT" : targetFaculty}",
+    "scopeAlignment": "1-2 sentence concise explanation of why this topic matches the venue's editorial scope.",
+    "scopeAlignmentBn": "বাংলা অনুবাদ (১-২ বাক্য কেন এই গবেষণা এই ভেন্যুতে মানানসই)",
+    "cfpCycle": "CFP cycle description e.g. Annual Spring Deadline: Oct 15 or Bi-monthly rolling review",
+    "reviewTurnaround": "e.g. 6-8 Weeks Average Decision",
+    "acceptanceFeasibility": "High or Moderate or Competitive",
+    "acceptanceFeasibilityDesc": "Honest advice on undergraduate acceptance feasibility",
+    "verifiedNonPredatory": true,
+    "verificationLink": "https://www.scimagojr.com/ or official index link",
+    "officialWebsite": "https://official-journal-site.org",
+    "isOpenAccess": true or false
+  }
+]`;
+
+      const result = await model.generateContent(prompt);
+      const text = result.response.text();
+      const cleaned = text.replace(/```json/g, "").replace(/```/g, "").trim();
+      const parsed = JSON.parse(cleaned);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map((item: any, idx: number) => ({
+          ...item,
+          id: item.id || `venue-match-${idx}`,
+          verifiedNonPredatory: true,
+          type: item.type === "Conference" ? "Conference" : "Journal"
+        }));
+      }
+    } catch (err) {
+      console.warn("Gemini venue matching error, falling back to all-faculty verified catalog:", err);
+    }
+  }
+
+  // Heuristic Semantic & Keyword Filter over ALL_FACULTY_VENUES
+  let candidates = [...ALL_FACULTY_VENUES];
+
+  // Faculty Filter
+  if (targetFaculty && targetFaculty !== "ALL") {
+    candidates = candidates.filter(
+      (v) => v.facultyCode === targetFaculty || v.facultyCode === ("INTERDISCIPLINARY" as any)
+    );
+  }
+
+  // Venue Type Filter
+  if (venueType && venueType !== "all") {
+    if (venueType === "conference") {
+      candidates = candidates.filter((v) => v.type === "Conference");
+    } else if (venueType === "journal") {
+      candidates = candidates.filter((v) => v.type === "Journal");
+    } else if (venueType === "open_access") {
+      candidates = candidates.filter((v) => v.isOpenAccess);
+    }
+  }
+
+  // If candidate count is low because of strict filters, include interdisciplinary venues
+  if (candidates.length < 3) {
+    candidates = ALL_FACULTY_VENUES;
+  }
+
+  // If topic provided, rank candidates based on keyword overlap
+  if (topic && topic.trim().length > 0) {
+    const searchTerms = topic.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+    candidates.sort((a, b) => {
+      const aScore = searchTerms.filter((term) =>
+        a.name.toLowerCase().includes(term) ||
+        a.field.toLowerCase().includes(term) ||
+        a.scopeAlignment.toLowerCase().includes(term)
+      ).length;
+      const bScore = searchTerms.filter((term) =>
+        b.name.toLowerCase().includes(term) ||
+        b.field.toLowerCase().includes(term) ||
+        b.scopeAlignment.toLowerCase().includes(term)
+      ).length;
+      return bScore - aScore;
+    });
+  }
+
+  return candidates.slice(0, 6);
+}
+

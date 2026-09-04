@@ -139,6 +139,28 @@ export interface VenueItem {
   departments: DepartmentCode[];
 }
 
+export interface MatchedVenueResult {
+  id: string;
+  name: string;
+  acronym: string;
+  publisher: string;
+  type: "Journal" | "Conference";
+  tier: string;
+  indexing: string[];
+  field: string;
+  facultyCode: FacultyCode;
+  scopeAlignment: string;
+  scopeAlignmentBn?: string;
+  cfpCycle: string;
+  reviewTurnaround: string;
+  acceptanceFeasibility: "High" | "Moderate" | "Competitive";
+  acceptanceFeasibilityDesc: string;
+  verifiedNonPredatory: boolean;
+  verificationLink: string;
+  officialWebsite: string;
+  isOpenAccess: boolean;
+}
+
 export interface MilestoneTask {
   id: string;
   title: string;
